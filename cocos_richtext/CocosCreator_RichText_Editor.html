@@ -1,10 +1,8 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
     <title>Cocos Creator 3.8 RichText BBCode 可视化编辑器</title>
     <style>
       :root {
@@ -34,20 +32,35 @@
         --selection-border: rgba(255, 255, 255, 0.72);
         color-scheme: dark;
       }
-      * { box-sizing: border-box; }
-      html { background: var(--bg); }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        background: var(--bg);
+      }
       body {
         margin: 0;
         min-height: 100vh;
         background:
           radial-gradient(circle at top left, rgba(46, 204, 184, 0.09), transparent 28%),
-          radial-gradient(circle at 88% 12%, rgba(86, 121, 255, 0.06), transparent 22%),
-          linear-gradient(180deg, #161f2a 0%, #111922 100%);
+          radial-gradient(circle at 88% 12%, rgba(86, 121, 255, 0.06), transparent 22%), linear-gradient(180deg, #161f2a 0%, #111922 100%);
         color: var(--text);
-        font: 14px/1.5 "IBM Plex Sans", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-        transition: background 0.25s ease, color 0.25s ease;
+        font:
+          14px/1.5 'IBM Plex Sans',
+          'Segoe UI',
+          'PingFang SC',
+          'Microsoft YaHei',
+          sans-serif;
+        transition:
+          background 0.25s ease,
+          color 0.25s ease;
       }
-      button, input, select, textarea { font: inherit; }
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
       .page-header {
         position: sticky;
         top: 0;
@@ -59,9 +72,16 @@
         border-bottom: 1px solid var(--line);
         background: var(--header-bg);
         backdrop-filter: blur(22px);
-        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03), var(--shadow-soft);
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.03),
+          var(--shadow-soft);
       }
-      .page-header h1 { margin: 0; font-size: 17px; font-weight: 620; letter-spacing: 0.01em; }
+      .page-header h1 {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 620;
+        letter-spacing: 0.01em;
+      }
       .pill {
         padding: 4px 10px;
         border-radius: 999px;
@@ -70,9 +90,19 @@
         color: #9fc3bf;
         font-size: 11px;
       }
-      .header-spacer { flex: 1; }
-      .toggle-row { display: flex; align-items: center; gap: 8px; }
-      .wrap { display: grid; grid-template-columns: 320px 1fr; min-height: calc(100vh - 52px); }
+      .header-spacer {
+        flex: 1;
+      }
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .wrap {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        min-height: calc(100vh - 52px);
+      }
       .toolbar {
         padding: 10px;
         display: flex;
@@ -88,17 +118,57 @@
         border: 1px solid var(--line);
         border-radius: 14px;
         background: linear-gradient(180deg, rgba(25, 36, 48, 0.96), rgba(20, 30, 41, 0.96));
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02), var(--shadow-soft);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.02),
+          var(--shadow-soft);
       }
-      .group h3 { margin: 0 0 7px; font-size: 10px; font-weight: 700; color: var(--text-soft); text-transform: uppercase; letter-spacing: 0.12em; }
-      .muted { color: var(--text-dim); }
-      .stack { display: flex; flex-direction: column; gap: 8px; }
-      .btnrow, .field-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
-      .field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
-      .field { display: flex; flex-direction: column; gap: 4px; }
-      .field.wide { grid-column: 1 / -1; }
-      .field label { color: var(--text-soft); font-size: 10px; letter-spacing: 0.02em; }
-      button, select, input[type="text"], input[type="number"], input[type="color"], textarea {
+      .group h3 {
+        margin: 0 0 7px;
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--text-soft);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+      }
+      .muted {
+        color: var(--text-dim);
+      }
+      .stack {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .btnrow,
+      .field-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+      }
+      .field-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .field.wide {
+        grid-column: 1 / -1;
+      }
+      .field label {
+        color: var(--text-soft);
+        font-size: 10px;
+        letter-spacing: 0.02em;
+      }
+      button,
+      select,
+      input[type='text'],
+      input[type='number'],
+      input[type='color'],
+      textarea {
         border: 1px solid var(--line);
         border-radius: 10px;
         background: var(--field-bg);
@@ -106,26 +176,57 @@
         padding: 7px 9px;
         font-size: 12px;
         box-shadow: none;
-        transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
+        transition:
+          transform 0.16s ease,
+          border-color 0.16s ease,
+          background 0.16s ease,
+          color 0.16s ease;
       }
-      select, select option, select optgroup { background: #1a2633; color: var(--text); }
-      input[type="text"]::placeholder, input[type="number"]::placeholder, textarea::placeholder { color: #73869a; }
-      input[type="color"] { min-height: 32px; padding: 3px; }
+      select,
+      select option,
+      select optgroup {
+        background: #1a2633;
+        color: var(--text);
+      }
+      input[type='text']::placeholder,
+      input[type='number']::placeholder,
+      textarea::placeholder {
+        color: #73869a;
+      }
+      input[type='color'] {
+        min-height: 32px;
+        padding: 3px;
+      }
       button {
         cursor: pointer;
         font-weight: 600;
         background: var(--btn-bg);
         color: var(--text);
       }
-      button:hover { background: var(--btn-hover); border-color: var(--line-strong); transform: translateY(-1px); }
-      button:active { transform: translateY(0); }
-      button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible {
+      button:hover {
+        background: var(--btn-hover);
+        border-color: var(--line-strong);
+        transform: translateY(-1px);
+      }
+      button:active {
+        transform: translateY(0);
+      }
+      button:focus-visible,
+      select:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible {
         outline: none;
         border-color: rgba(31, 182, 166, 0.5);
         box-shadow: 0 0 0 3px rgba(31, 182, 166, 0.14);
       }
-      .main { padding: 12px; }
-      .panels { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .main {
+        padding: 12px;
+      }
+      .panels {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
       .panel {
         display: flex;
         flex-direction: column;
@@ -135,15 +236,47 @@
         border-radius: 20px;
         background: linear-gradient(180deg, rgba(24, 35, 47, 0.96), rgba(19, 28, 38, 0.96));
         backdrop-filter: blur(20px);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02), var(--shadow-strong);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.02),
+          var(--shadow-strong);
       }
-      .panel-header, .panel-footer { padding: 11px 14px; background: rgba(20, 30, 41, 0.76); }
-      .panel-header { border-bottom: 1px solid var(--line); }
-      .panel-footer { border-top: 1px solid var(--line); }
-      .panel-header h2 { margin: 0; font-size: 13px; color: var(--text); letter-spacing: 0.02em; }
-      .panel-header-row { display: flex; align-items: center; gap: 8px; }
-      .editor-actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--line); background: rgba(20, 30, 41, 0.7); }
-      .editor, .preview { flex: 1; overflow: auto; padding: 14px; background: var(--preview-bg); }
+      .panel-header,
+      .panel-footer {
+        padding: 11px 14px;
+        background: rgba(20, 30, 41, 0.76);
+      }
+      .panel-header {
+        border-bottom: 1px solid var(--line);
+      }
+      .panel-footer {
+        border-top: 1px solid var(--line);
+      }
+      .panel-header h2 {
+        margin: 0;
+        font-size: 13px;
+        color: var(--text);
+        letter-spacing: 0.02em;
+      }
+      .panel-header-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .editor-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--line);
+        background: rgba(20, 30, 41, 0.7);
+      }
+      .editor,
+      .preview {
+        flex: 1;
+        overflow: auto;
+        padding: 14px;
+        background: var(--preview-bg);
+      }
       #viz {
         min-height: 320px;
         outline: none;
@@ -155,42 +288,162 @@
         border-radius: 14px;
         box-shadow: inset 0 0 0 1px rgba(121, 154, 177, 0.08);
       }
-      #viz::selection, #viz *::selection { background: transparent; color: inherit; }
+      #viz::selection,
+      #viz *::selection {
+        background: transparent;
+        color: inherit;
+      }
       #bbcode {
         margin: 0;
         white-space: pre-wrap;
         word-break: break-word;
-        font-family: "JetBrains Mono", "Cascadia Code", "Consolas", monospace;
+        font-family: 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
         font-size: 20px;
         line-height: 1.55;
         background: linear-gradient(180deg, rgba(24, 35, 47, 0.95), rgba(19, 28, 39, 0.95));
         border-radius: 14px;
         box-shadow: inset 0 0 0 1px rgba(121, 154, 177, 0.08);
       }
-      .toolbar-note { color: var(--text-dim); font-size: 11px; line-height: 1.6; }
+      .toolbar-note {
+        color: var(--text-dim);
+        font-size: 11px;
+        line-height: 1.6;
+      }
+      .import-box {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding: 12px 14px;
+        border-top: 1px solid var(--line);
+        background: rgba(18, 28, 39, 0.72);
+      }
+      .import-box textarea {
+        min-height: 120px;
+        resize: vertical;
+        font-family: 'JetBrains Mono', 'Cascadia Code', 'Consolas', monospace;
+        line-height: 1.5;
+      }
+      .import-actions {
+        display: flex;
+        justify-content: flex-end;
+      }
       .copy-note {
         color: var(--warn);
         text-shadow: none;
       }
-      .toast { position: fixed; left: 50%; top: 25vh; transform: translateX(-50%); z-index: 9999; padding: 16px 22px; border: 1px solid rgba(31, 182, 166, 0.24); border-radius: 14px; background: rgba(12, 21, 32, 0.95); color: var(--text); font-size: 15px; line-height: 1.2; text-align: center; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.34); opacity: 0; pointer-events: none; will-change: transform, opacity; }
-      .toast.is-visible { opacity: 1; animation: toast-pop 1.8s ease forwards; }
-      .selection-overlay { position: fixed; inset: 0; pointer-events: none; z-index: 9000; }
-      .selection-rect { position: fixed; border: 1px solid var(--selection-border); border-radius: 2px; background: transparent; box-sizing: border-box; }
-      @keyframes toast-pop { 0% { opacity: 0; transform: translateX(-50%) translateY(-12px) scale(0.92); } 14% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1.03); } 22% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); } 78% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); } 100% { opacity: 0; transform: translateX(-50%) translateY(-10px) scale(0.96); } }
-      #viz span[data-tag="b"] { font-weight: 800; }
-      #viz span[data-tag="i"] { font-style: italic; }
-      #viz span[data-tag="u"] { text-decoration: underline; text-underline-offset: 3px; }
-      #viz span[data-tag="outline"] { text-shadow: 0 0 1px #fff; }
-      #viz span[data-tag="on"] { outline: 1px dashed var(--success); outline-offset: 2px; }
-      #viz span[data-click], #viz span[data-tag="img"][data-click] { box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--accent) 60%, transparent); }
-      #viz span[data-tag="img"] { display: inline-block; vertical-align: baseline; padding: 0; margin: 0 2px; background: transparent; border: 0; }
-      #viz .img-preview { display: block; max-width: 120px; max-height: 64px; object-fit: contain; background: transparent; }
+      .toast {
+        position: fixed;
+        left: 50%;
+        top: 25vh;
+        transform: translateX(-50%);
+        z-index: 9999;
+        padding: 16px 22px;
+        border: 1px solid rgba(31, 182, 166, 0.24);
+        border-radius: 14px;
+        background: rgba(12, 21, 32, 0.95);
+        color: var(--text);
+        font-size: 15px;
+        line-height: 1.2;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.34);
+        opacity: 0;
+        pointer-events: none;
+        will-change: transform, opacity;
+      }
+      .toast.is-visible {
+        opacity: 1;
+        animation: toast-pop 1.8s ease forwards;
+      }
+      .selection-overlay {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 9000;
+      }
+      .selection-rect {
+        position: fixed;
+        border: 1px solid var(--selection-border);
+        border-radius: 2px;
+        background: transparent;
+        box-sizing: border-box;
+      }
+      @keyframes toast-pop {
+        0% {
+          opacity: 0;
+          transform: translateX(-50%) translateY(-12px) scale(0.92);
+        }
+        14% {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0) scale(1.03);
+        }
+        22% {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0) scale(1);
+        }
+        78% {
+          opacity: 1;
+          transform: translateX(-50%) translateY(0) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translateX(-50%) translateY(-10px) scale(0.96);
+        }
+      }
+      #viz span[data-tag='b'] {
+        font-weight: 800;
+      }
+      #viz span[data-tag='i'] {
+        font-style: italic;
+      }
+      #viz span[data-tag='u'] {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      #viz span[data-tag='outline'] {
+        text-shadow: 0 0 1px #fff;
+      }
+      #viz span[data-tag='on'] {
+        outline: 1px dashed var(--success);
+        outline-offset: 2px;
+      }
+      #viz span[data-click],
+      #viz span[data-tag='img'][data-click] {
+        box-shadow: inset 0 -1px 0 color-mix(in srgb, var(--accent) 60%, transparent);
+      }
+      #viz span[data-tag='img'] {
+        display: inline-block;
+        vertical-align: baseline;
+        padding: 0;
+        margin: 0 2px;
+        background: transparent;
+        border: 0;
+      }
+      #viz .img-preview {
+        display: block;
+        max-width: 120px;
+        max-height: 64px;
+        object-fit: contain;
+        background: transparent;
+      }
       @media (max-width: 980px) {
-        .wrap { grid-template-columns: 1fr; }
-        .toolbar { border-right: 0; border-bottom: 1px solid var(--line); padding: 12px; }
-        .panels { grid-template-columns: 1fr; }
-        .page-header { flex-wrap: wrap; padding: 16px; }
-        .header-spacer { display: none; }
+        .wrap {
+          grid-template-columns: 1fr;
+        }
+        .toolbar {
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+          padding: 12px;
+        }
+        .panels {
+          grid-template-columns: 1fr;
+        }
+        .page-header {
+          flex-wrap: wrap;
+          padding: 16px;
+        }
+        .header-spacer {
+          display: none;
+        }
       }
     </style>
   </head>
@@ -213,7 +466,9 @@
           <div class="btnrow">
             <button type="button" data-action="wrap" data-tag="b" aria-label="Bold"><strong>B</strong></button>
             <button type="button" data-action="wrap" data-tag="i" aria-label="Italic"><em>I</em></button>
-            <button type="button" data-action="wrap" data-tag="u" aria-label="Underline"><span style="text-decoration: underline; text-underline-offset: 3px">U</span></button>
+            <button type="button" data-action="wrap" data-tag="u" aria-label="Underline">
+              <span style="text-decoration: underline; text-underline-offset: 3px">U</span>
+            </button>
             <button type="button" id="btn-br">插入 &lt;br/&gt;</button>
           </div>
         </div>
@@ -333,11 +588,20 @@
           <div class="panel">
             <div class="panel-header">
               <div class="panel-header-row">
-                <button type="button" id="btn-copy" title="复制右侧 BBCode">复制 BBCode<span class="copy-note">（每次操作之后会自动复制到剪贴板）</span></button>
+                <button type="button" id="btn-copy" title="复制右侧 BBCode">
+                  复制 BBCode<span class="copy-note">（每次操作之后会自动复制到剪贴板）</span>
+                </button>
                 <h2 id="panel-bbcode-title">生成的 BBCode</h2>
               </div>
             </div>
             <pre id="bbcode" class="preview"></pre>
+            <div class="import-box">
+              <label for="inp-bbcode-import" id="label-bbcode-import" class="muted">粘贴要修改的 BBCode</label>
+              <textarea id="inp-bbcode-import" placeholder="在这里粘贴 BBCode，然后导入到左侧编辑区"></textarea>
+              <div class="import-actions">
+                <button type="button" id="btn-import-bbcode">导入到编辑区</button>
+              </div>
+            </div>
             <div class="panel-footer muted" id="bbcode-help">输出遵循 Cocos Creator 3.8 RichText 官方语法，可直接复制到使用环境。</div>
           </div>
         </section>
@@ -350,268 +614,622 @@
     <script>
       const translations = {
         zh: {
-          title: "RichText BBCode 可视化编辑器 · Cocos Creator 3.8",
-          pillLeft: "左侧设置属性",
-          pillMiddle: "中间选中内容应用",
-          pillRight: "右侧直接复制结果",
-          langToggle: "English",
-          groupBasic: "基础样式",
-          insertBr: "插入 <br/>",
-          groupColor: "颜色 color",
-          labelColorPicker: "颜色面板",
-          labelColorText: "颜色值",
-          applyColor: "套用 color",
-          groupSize: "字号 size",
-          labelSize: "字号",
-          applySize: "套用 size",
-          groupOutline: "描边 outline",
-          labelOutlineColor: "描边色",
-          labelOutlineWidth: "宽度",
-          applyOutline: "套用 outline",
-          groupOn: "事件 on",
-          labelOnClick: "click",
-          labelOnParam: "param",
-          onParamPlaceholder: "可选",
-          applyOn: "套用 on",
-          groupImg: "图片 img",
-          labelImgSrc: "src（可以将图片放在本工具同目录下，方便预览）",
-          imgSrcPlaceholder: "textures/icon/star（只输入文件名即可）",
-          labelImgWidth: "width",
-          labelImgHeight: "height",
-          labelImgAlign: "align",
-          imgOptionalPlaceholder: "可选",
-          optionDefault: "默认",
-          labelImgOffset: "offset",
-          labelImgClick: "click",
-          insertImg: "插入 img",
-          groupNotes: "说明",
-          noteSupported: "官方支持的标签已全部覆盖：`b`、`i`、`u`、`color`、`size`、`outline`、`on`、`img`、`br`。",
-          panelEditorTitle: "编辑区",
-          undo: "撤销",
-          redo: "重做",
-          clearFormat: "清除格式",
-          editorHelp: "1. 选中需要操作的内容<br />2. 套用左边的操作",
-          copyButton: "复制 BBCode（每次操作之后会自动复制到剪贴板）",
-          panelBbcodeTitle: "生成的 BBCode",
-          bbcodeHelp: "输出遵循 Cocos Creator 3.8 RichText 官方语法，可直接复制到使用环境。",
-          undoTitle: "撤销 (Ctrl+Z)",
-          redoTitle: "重做 (Ctrl+Y / Ctrl+Shift+Z)",
-          clearFormatTitle: "将选中文本还原为纯文本",
-          copyTitle: "复制右侧 BBCode",
-          toastNoSelection: "你没有选择任何要操作的内容",
-          toastCopied: "已复制到剪贴板",
-          toastCopyFailed: "复制失败",
-          toastImgSrc: "请先填写 img 的 src。",
-          toastOnClick: "请先填写 on 的 click。",
-          sample: "欢迎使用 <span data-tag='color' data-color='#22d3ee' style='color:#22d3ee;'>RichText</span> 编辑器。选中文字后点击左侧对应按钮即可生成 BBCode。"
+          title: 'RichText BBCode 可视化编辑器 · Cocos Creator 3.8',
+          pillLeft: '左侧设置属性',
+          pillMiddle: '中间选中内容应用',
+          pillRight: '右侧直接复制结果',
+          langToggle: 'English',
+          groupBasic: '基础样式',
+          insertBr: '插入 <br/>',
+          groupColor: '颜色 color',
+          labelColorPicker: '颜色面板',
+          labelColorText: '颜色值',
+          applyColor: '套用 color',
+          groupSize: '字号 size',
+          labelSize: '字号',
+          applySize: '套用 size',
+          groupOutline: '描边 outline',
+          labelOutlineColor: '描边色',
+          labelOutlineWidth: '宽度',
+          applyOutline: '套用 outline',
+          groupOn: '事件 on',
+          labelOnClick: 'click',
+          labelOnParam: 'param',
+          onParamPlaceholder: '可选',
+          applyOn: '套用 on',
+          groupImg: '图片 img',
+          labelImgSrc: 'src（可以将图片放在本工具同目录下，方便预览）',
+          imgSrcPlaceholder: 'textures/icon/star（只输入文件名即可）',
+          labelImgWidth: 'width',
+          labelImgHeight: 'height',
+          labelImgAlign: 'align',
+          imgOptionalPlaceholder: '可选',
+          optionDefault: '默认',
+          labelImgOffset: 'offset',
+          labelImgClick: 'click',
+          insertImg: '插入 img',
+          groupNotes: '说明',
+          noteSupported: '官方支持的标签已全部覆盖：`b`、`i`、`u`、`color`、`size`、`outline`、`on`、`img`、`br`。',
+          panelEditorTitle: '编辑区',
+          undo: '撤销',
+          redo: '重做',
+          clearFormat: '清除格式',
+          editorHelp: '1. 选中需要操作的内容<br />2. 套用左边的操作',
+          copyButton: '复制 BBCode（每次操作之后会自动复制到剪贴板）',
+          panelBbcodeTitle: '生成的 BBCode',
+          bbcodeImportLabel: '粘贴要修改的 BBCode',
+          bbcodeImportPlaceholder: '在这里粘贴 BBCode，然后导入到左侧编辑区',
+          importButton: '导入到编辑区',
+          bbcodeHelp: '输出遵循 Cocos Creator 3.8 RichText 官方语法，可直接复制到使用环境。',
+          undoTitle: '撤销 (Ctrl+Z)',
+          redoTitle: '重做 (Ctrl+Y / Ctrl+Shift+Z)',
+          clearFormatTitle: '将选中文本还原为纯文本',
+          copyTitle: '复制右侧 BBCode',
+          toastNoSelection: '你没有选择任何要操作的内容',
+          toastCopied: '已复制到剪贴板',
+          toastCopyFailed: '复制失败',
+          toastImgSrc: '请先填写 img 的 src。',
+          toastOnClick: '请先填写 on 的 click。',
+          toastImportEmpty: '请先粘贴要导入的 BBCode。',
+          toastImportFailed: 'BBCode 解析失败，请检查标签是否闭合。',
+          sample:
+            "欢迎使用 <span data-tag='color' data-color='#22d3ee' style='color:#22d3ee;'>RichText</span> 编辑器。选中文字后点击左侧对应按钮即可生成 BBCode。",
         },
         en: {
-          title: "RichText BBCode Visual Editor · Cocos Creator 3.8",
-          pillLeft: "Set attributes on the left",
-          pillMiddle: "Select content in the middle",
-          pillRight: "Copy result on the right",
-          langToggle: "中文",
-          groupBasic: "Basic",
-          insertBr: "Insert <br/>",
-          groupColor: "Color",
-          labelColorPicker: "Color Picker",
-          labelColorText: "Color Value",
-          applyColor: "Apply color",
-          groupSize: "Size",
-          labelSize: "Font Size",
-          applySize: "Apply size",
-          groupOutline: "Outline",
-          labelOutlineColor: "Outline Color",
-          labelOutlineWidth: "Width",
-          applyOutline: "Apply outline",
-          groupOn: "Event on",
-          labelOnClick: "click",
-          labelOnParam: "param",
-          onParamPlaceholder: "Optional",
-          applyOn: "Apply on",
-          groupImg: "Image img",
-          labelImgSrc: "src (placing images beside this tool makes preview easier)",
-          imgSrcPlaceholder: "textures/icon/star (filename only is fine)",
-          labelImgWidth: "width",
-          labelImgHeight: "height",
-          labelImgAlign: "align",
-          imgOptionalPlaceholder: "Optional",
-          optionDefault: "Default",
-          labelImgOffset: "offset",
-          labelImgClick: "click",
-          insertImg: "Insert img",
-          groupNotes: "Notes",
-          noteSupported: "All official tags are covered: `b`, `i`, `u`, `color`, `size`, `outline`, `on`, `img`, `br`.",
-          panelEditorTitle: "Editor",
-          undo: "Undo",
-          redo: "Redo",
-          clearFormat: "Clear Format",
-          editorHelp: "1. Select the content you want to edit<br />2. Apply an action from the left",
-          copyButton: "Copy BBCode (auto-copies after every action)",
-          panelBbcodeTitle: "Generated BBCode",
-          bbcodeHelp: "Output follows the official Cocos Creator 3.8 RichText syntax and can be pasted directly.",
-          undoTitle: "Undo (Ctrl+Z)",
-          redoTitle: "Redo (Ctrl+Y / Ctrl+Shift+Z)",
-          clearFormatTitle: "Restore the selected text to plain text",
-          copyTitle: "Copy the BBCode on the right",
-          toastNoSelection: "No content is selected for this action",
-          toastCopied: "Copied to clipboard",
-          toastCopyFailed: "Copy failed",
-          toastImgSrc: "Please fill in img src first.",
-          toastOnClick: "Please fill in on click first.",
-          sample: "Welcome to the <span data-tag='color' data-color='#22d3ee' style='color:#22d3ee;'>RichText</span> editor. Select text and then click an action on the left to generate BBCode."
-        }
+          title: 'RichText BBCode Visual Editor · Cocos Creator 3.8',
+          pillLeft: 'Set attributes on the left',
+          pillMiddle: 'Select content in the middle',
+          pillRight: 'Copy result on the right',
+          langToggle: '中文',
+          groupBasic: 'Basic',
+          insertBr: 'Insert <br/>',
+          groupColor: 'Color',
+          labelColorPicker: 'Color Picker',
+          labelColorText: 'Color Value',
+          applyColor: 'Apply color',
+          groupSize: 'Size',
+          labelSize: 'Font Size',
+          applySize: 'Apply size',
+          groupOutline: 'Outline',
+          labelOutlineColor: 'Outline Color',
+          labelOutlineWidth: 'Width',
+          applyOutline: 'Apply outline',
+          groupOn: 'Event on',
+          labelOnClick: 'click',
+          labelOnParam: 'param',
+          onParamPlaceholder: 'Optional',
+          applyOn: 'Apply on',
+          groupImg: 'Image img',
+          labelImgSrc: 'src (placing images beside this tool makes preview easier)',
+          imgSrcPlaceholder: 'textures/icon/star (filename only is fine)',
+          labelImgWidth: 'width',
+          labelImgHeight: 'height',
+          labelImgAlign: 'align',
+          imgOptionalPlaceholder: 'Optional',
+          optionDefault: 'Default',
+          labelImgOffset: 'offset',
+          labelImgClick: 'click',
+          insertImg: 'Insert img',
+          groupNotes: 'Notes',
+          noteSupported: 'All official tags are covered: `b`, `i`, `u`, `color`, `size`, `outline`, `on`, `img`, `br`.',
+          panelEditorTitle: 'Editor',
+          undo: 'Undo',
+          redo: 'Redo',
+          clearFormat: 'Clear Format',
+          editorHelp: '1. Select the content you want to edit<br />2. Apply an action from the left',
+          copyButton: 'Copy BBCode (auto-copies after every action)',
+          panelBbcodeTitle: 'Generated BBCode',
+          bbcodeImportLabel: 'Paste BBCode to edit',
+          bbcodeImportPlaceholder: 'Paste BBCode here, then import it into the editor',
+          importButton: 'Import to editor',
+          bbcodeHelp: 'Output follows the official Cocos Creator 3.8 RichText syntax and can be pasted directly.',
+          undoTitle: 'Undo (Ctrl+Z)',
+          redoTitle: 'Redo (Ctrl+Y / Ctrl+Shift+Z)',
+          clearFormatTitle: 'Restore the selected text to plain text',
+          copyTitle: 'Copy the BBCode on the right',
+          toastNoSelection: 'No content is selected for this action',
+          toastCopied: 'Copied to clipboard',
+          toastCopyFailed: 'Copy failed',
+          toastImgSrc: 'Please fill in img src first.',
+          toastOnClick: 'Please fill in on click first.',
+          toastImportEmpty: 'Paste BBCode to import first.',
+          toastImportFailed: 'Failed to parse the BBCode. Check whether tags are properly closed.',
+          sample:
+            "Welcome to the <span data-tag='color' data-color='#22d3ee' style='color:#22d3ee;'>RichText</span> editor. Select text and then click an action on the left to generate BBCode.",
+        },
       };
 
-  const state = { lang: "zh" };
-      const history = { stack: [], index: -1, maxSize: 50,
-        push(stateHtml) { this.stack = this.stack.slice(0, this.index + 1); this.stack.push(stateHtml); if (this.stack.length > this.maxSize) this.stack.shift(); else this.index += 1; },
-        undo() { if (this.index > 0) { this.index -= 1; return this.stack[this.index]; } return null; },
-        redo() { if (this.index < this.stack.length - 1) { this.index += 1; return this.stack[this.index]; } return null; }
+      const state = { lang: 'zh' };
+      const history = {
+        stack: [],
+        index: -1,
+        maxSize: 50,
+        push(stateHtml) {
+          this.stack = this.stack.slice(0, this.index + 1);
+          this.stack.push(stateHtml);
+          if (this.stack.length > this.maxSize) this.stack.shift();
+          else this.index += 1;
+        },
+        undo() {
+          if (this.index > 0) {
+            this.index -= 1;
+            return this.stack[this.index];
+          }
+          return null;
+        },
+        redo() {
+          if (this.index < this.stack.length - 1) {
+            this.index += 1;
+            return this.stack[this.index];
+          }
+          return null;
+        },
       };
       const selectionState = { range: null };
       let toastTimer = 0;
 
-      function t(key) { return translations[state.lang][key]; }
-      function setText(id, key) { document.getElementById(id).textContent = t(key); }
-      function setHtml(id, key) { document.getElementById(id).innerHTML = t(key); }
+      function t(key) {
+        return translations[state.lang][key];
+      }
+      function setText(id, key) {
+        document.getElementById(id).textContent = t(key);
+      }
+      function setHtml(id, key) {
+        document.getElementById(id).innerHTML = t(key);
+      }
       function applyLanguage() {
-        document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
-        document.title = t("title");
-        setText("title-main", "title"); setText("pill-left", "pillLeft"); setText("pill-middle", "pillMiddle"); setText("pill-right", "pillRight");
-        setText("group-basic", "groupBasic"); setText("btn-br", "insertBr"); setText("group-color", "groupColor"); setText("label-color-picker", "labelColorPicker"); setText("label-color-text", "labelColorText"); setText("btn-apply-color", "applyColor");
-        setText("group-size", "groupSize"); setText("label-size", "labelSize"); setText("btn-apply-size", "applySize");
-        setText("group-outline", "groupOutline"); setText("label-outline-color", "labelOutlineColor"); setText("label-outline-width", "labelOutlineWidth"); setText("btn-apply-outline", "applyOutline");
-        setText("group-on", "groupOn"); setText("label-on-click", "labelOnClick"); setText("label-on-param", "labelOnParam"); document.getElementById("inp-on-param").placeholder = t("onParamPlaceholder"); setText("btn-apply-on", "applyOn");
-        setText("group-img", "groupImg"); setText("label-img-src", "labelImgSrc"); document.getElementById("inp-img-src").placeholder = t("imgSrcPlaceholder"); setText("label-img-width", "labelImgWidth"); setText("label-img-height", "labelImgHeight"); setText("label-img-align", "labelImgAlign"); document.getElementById("inp-img-width").placeholder = t("imgOptionalPlaceholder"); document.getElementById("inp-img-height").placeholder = t("imgOptionalPlaceholder"); setText("option-default", "optionDefault"); setText("label-img-offset", "labelImgOffset"); setText("label-img-click", "labelImgClick"); setText("btn-img", "insertImg");
-        setText("group-notes", "groupNotes"); setText("note-supported", "noteSupported"); setText("panel-editor-title", "panelEditorTitle"); setText("btn-undo", "undo"); setText("btn-redo", "redo"); setText("btn-clear-format", "clearFormat"); setHtml("editor-help", "editorHelp"); setText("btn-copy", "copyButton"); setText("panel-bbcode-title", "panelBbcodeTitle"); setText("bbcode-help", "bbcodeHelp");
-        document.getElementById("btn-undo").title = t("undoTitle"); document.getElementById("btn-redo").title = t("redoTitle"); document.getElementById("btn-clear-format").title = t("clearFormatTitle"); document.getElementById("btn-copy").title = t("copyTitle"); document.getElementById("btn-lang-toggle").textContent = t("langToggle");
+        document.documentElement.lang = state.lang === 'zh' ? 'zh-CN' : 'en';
+        document.title = t('title');
+        setText('title-main', 'title');
+        setText('pill-left', 'pillLeft');
+        setText('pill-middle', 'pillMiddle');
+        setText('pill-right', 'pillRight');
+        setText('group-basic', 'groupBasic');
+        setText('btn-br', 'insertBr');
+        setText('group-color', 'groupColor');
+        setText('label-color-picker', 'labelColorPicker');
+        setText('label-color-text', 'labelColorText');
+        setText('btn-apply-color', 'applyColor');
+        setText('group-size', 'groupSize');
+        setText('label-size', 'labelSize');
+        setText('btn-apply-size', 'applySize');
+        setText('group-outline', 'groupOutline');
+        setText('label-outline-color', 'labelOutlineColor');
+        setText('label-outline-width', 'labelOutlineWidth');
+        setText('btn-apply-outline', 'applyOutline');
+        setText('group-on', 'groupOn');
+        setText('label-on-click', 'labelOnClick');
+        setText('label-on-param', 'labelOnParam');
+        document.getElementById('inp-on-param').placeholder = t('onParamPlaceholder');
+        setText('btn-apply-on', 'applyOn');
+        setText('group-img', 'groupImg');
+        setText('label-img-src', 'labelImgSrc');
+        document.getElementById('inp-img-src').placeholder = t('imgSrcPlaceholder');
+        setText('label-img-width', 'labelImgWidth');
+        setText('label-img-height', 'labelImgHeight');
+        setText('label-img-align', 'labelImgAlign');
+        document.getElementById('inp-img-width').placeholder = t('imgOptionalPlaceholder');
+        document.getElementById('inp-img-height').placeholder = t('imgOptionalPlaceholder');
+        setText('option-default', 'optionDefault');
+        setText('label-img-offset', 'labelImgOffset');
+        setText('label-img-click', 'labelImgClick');
+        setText('btn-img', 'insertImg');
+        setText('group-notes', 'groupNotes');
+        setText('note-supported', 'noteSupported');
+        setText('panel-editor-title', 'panelEditorTitle');
+        setText('btn-undo', 'undo');
+        setText('btn-redo', 'redo');
+        setText('btn-clear-format', 'clearFormat');
+        setHtml('editor-help', 'editorHelp');
+        setText('btn-copy', 'copyButton');
+        setText('panel-bbcode-title', 'panelBbcodeTitle');
+        setText('label-bbcode-import', 'bbcodeImportLabel');
+        document.getElementById('inp-bbcode-import').placeholder = t('bbcodeImportPlaceholder');
+        setText('btn-import-bbcode', 'importButton');
+        setText('bbcode-help', 'bbcodeHelp');
+        document.getElementById('btn-undo').title = t('undoTitle');
+        document.getElementById('btn-redo').title = t('redoTitle');
+        document.getElementById('btn-clear-format').title = t('clearFormatTitle');
+        document.getElementById('btn-copy').title = t('copyTitle');
+        document.getElementById('btn-lang-toggle').textContent = t('langToggle');
       }
 
-      function saveState() { history.push(document.getElementById("viz").innerHTML); }
-      function getText(id) { return document.getElementById(id).value.trim(); }
-      function getPositiveNumber(id) { const raw = document.getElementById(id).value.trim(); if (!raw) return ""; const value = Number.parseInt(raw, 10); return Number.isFinite(value) && value > 0 ? String(value) : ""; }
-      function pickColorValue(textId, pickerId) { const text = getText(textId); return text || document.getElementById(pickerId).value; }
-      function escapeText(value) { return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
-      function escapeAttr(value, quote) { const escaped = escapeText(value); return quote === "'" ? escaped.replace(/'/g, "&apos;") : escaped.replace(/\"/g, "&quot;"); }
-      function buildClickAttrs(click, param, quote) { if (!click) return ""; const attrs = [`click=${quote}${escapeAttr(click, quote)}${quote}`]; if (param) attrs.push(`param=${quote}${escapeAttr(param, quote)}${quote}`); return " " + attrs.join(" "); }
+      function saveState() {
+        history.push(document.getElementById('viz').innerHTML);
+      }
+      function getText(id) {
+        return document.getElementById(id).value.trim();
+      }
+      function getPositiveNumber(id) {
+        const raw = document.getElementById(id).value.trim();
+        if (!raw) return '';
+        const value = Number.parseInt(raw, 10);
+        return Number.isFinite(value) && value > 0 ? String(value) : '';
+      }
+      function pickColorValue(textId, pickerId) {
+        const text = getText(textId);
+        return text || document.getElementById(pickerId).value;
+      }
+      function escapeText(value) {
+        return value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+      function escapeAttr(value, quote) {
+        const escaped = escapeText(value);
+        return quote === "'" ? escaped.replace(/'/g, '&apos;') : escaped.replace(/\"/g, '&quot;');
+      }
+      function buildClickAttrs(click, param, quote) {
+        if (!click) return '';
+        const attrs = [`click=${quote}${escapeAttr(click, quote)}${quote}`];
+        if (param) attrs.push(`param=${quote}${escapeAttr(param, quote)}${quote}`);
+        return ' ' + attrs.join(' ');
+      }
 
       function isRangeInsideViz(range) {
         if (!range) return false;
-        const viz = document.getElementById("viz");
+        const viz = document.getElementById('viz');
         const startNode = range.startContainer.nodeType === Node.ELEMENT_NODE ? range.startContainer : range.startContainer.parentNode;
         const endNode = range.endContainer.nodeType === Node.ELEMENT_NODE ? range.endContainer : range.endContainer.parentNode;
         return viz.contains(startNode) && viz.contains(endNode);
       }
-      function saveCurrentSelection() { const sel = window.getSelection(); if (!sel || sel.rangeCount === 0) return; const range = sel.getRangeAt(0); if (isRangeInsideViz(range)) selectionState.range = range.cloneRange(); }
-      function clearSelectionOverlay() { document.getElementById("selection-overlay").innerHTML = ""; }
+      function saveCurrentSelection() {
+        const sel = window.getSelection();
+        if (!sel || sel.rangeCount === 0) return;
+        const range = sel.getRangeAt(0);
+        if (isRangeInsideViz(range)) selectionState.range = range.cloneRange();
+      }
+      function clearSelectionOverlay() {
+        document.getElementById('selection-overlay').innerHTML = '';
+      }
       function renderSelectionOverlay(range) {
-        const overlay = document.getElementById("selection-overlay"); overlay.innerHTML = "";
+        const overlay = document.getElementById('selection-overlay');
+        overlay.innerHTML = '';
         if (!range || range.collapsed || !isRangeInsideViz(range)) return;
-        Array.from(range.getClientRects()).filter(rect => rect.width > 0 || rect.height > 0).forEach(rect => {
-          const el = document.createElement("div"); el.className = "selection-rect"; el.style.left = `${rect.left}px`; el.style.top = `${rect.top}px`; el.style.width = `${rect.width}px`; el.style.height = `${rect.height}px`; overlay.appendChild(el);
-        });
+        Array.from(range.getClientRects())
+          .filter(rect => rect.width > 0 || rect.height > 0)
+          .forEach(rect => {
+            const el = document.createElement('div');
+            el.className = 'selection-rect';
+            el.style.left = `${rect.left}px`;
+            el.style.top = `${rect.top}px`;
+            el.style.width = `${rect.width}px`;
+            el.style.height = `${rect.height}px`;
+            overlay.appendChild(el);
+          });
       }
       function getEditorRange() {
         const sel = window.getSelection();
         if (sel && sel.rangeCount > 0) {
           const liveRange = sel.getRangeAt(0);
-          if (isRangeInsideViz(liveRange)) { selectionState.range = liveRange.cloneRange(); renderSelectionOverlay(liveRange); return liveRange; }
+          if (isRangeInsideViz(liveRange)) {
+            selectionState.range = liveRange.cloneRange();
+            renderSelectionOverlay(liveRange);
+            return liveRange;
+          }
         }
-        if (selectionState.range) { renderSelectionOverlay(selectionState.range); return selectionState.range.cloneRange(); }
+        if (selectionState.range) {
+          renderSelectionOverlay(selectionState.range);
+          return selectionState.range.cloneRange();
+        }
         clearSelectionOverlay();
         return null;
       }
-      function restoreSavedSelection() { const range = getEditorRange(); if (!range) return null; const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range); selectionState.range = range.cloneRange(); renderSelectionOverlay(range); return range; }
+      function restoreSavedSelection() {
+        const range = getEditorRange();
+        if (!range) return null;
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        selectionState.range = range.cloneRange();
+        renderSelectionOverlay(range);
+        return range;
+      }
       function isWholeEditorRange(range) {
         if (!range) return false;
-        const viz = document.getElementById("viz");
+        const viz = document.getElementById('viz');
         const vizRange = document.createRange();
         vizRange.selectNodeContents(viz);
         return range.compareBoundaryPoints(Range.START_TO_START, vizRange) === 0 && range.compareBoundaryPoints(Range.END_TO_END, vizRange) === 0;
       }
       function findExactTaggedAncestorForRange(range) {
         if (!range) return null;
-        const viz = document.getElementById("viz");
-        let current = range.commonAncestorContainer.nodeType === Node.ELEMENT_NODE ? range.commonAncestorContainer : range.commonAncestorContainer.parentElement;
+        const viz = document.getElementById('viz');
+        let current =
+          range.commonAncestorContainer.nodeType === Node.ELEMENT_NODE ? range.commonAncestorContainer : range.commonAncestorContainer.parentElement;
         while (current && current !== viz) {
-          if (current.getAttribute && current.getAttribute("data-tag") && current.getAttribute("data-tag") !== "img") {
+          if (current.getAttribute && current.getAttribute('data-tag') && current.getAttribute('data-tag') !== 'img') {
             const currentRange = document.createRange();
             currentRange.selectNodeContents(current);
-            if (range.compareBoundaryPoints(Range.START_TO_START, currentRange) === 0 && range.compareBoundaryPoints(Range.END_TO_END, currentRange) === 0) return current;
+            if (
+              range.compareBoundaryPoints(Range.START_TO_START, currentRange) === 0 &&
+              range.compareBoundaryPoints(Range.END_TO_END, currentRange) === 0
+            )
+              return current;
           }
           current = current.parentElement;
         }
         return null;
       }
 
-      function nearestAncestorWithTag(node, tag) { let current = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement; while (current) { if (current.getAttribute && current.getAttribute("data-tag") === tag) return current; current = current.parentElement; } return null; }
-      function ancestorContainsRange(ancestor, range) { const ancestorRange = document.createRange(); ancestorRange.selectNodeContents(ancestor); return ancestorRange.compareBoundaryPoints(Range.START_TO_START, range) <= 0 && ancestorRange.compareBoundaryPoints(Range.END_TO_END, range) >= 0; }
-      function renderVisualMeta(span) { if (!(span instanceof HTMLElement)) return; if (span.dataset.click) span.title = span.dataset.param ? `click=${span.dataset.click}, param=${span.dataset.param}` : `click=${span.dataset.click}`; else span.removeAttribute("title"); }
-      function normalizePreviewSrc(src) { if (!src) return ""; if (/^(https?:|file:|data:|blob:)/i.test(src)) return src; if (/^[a-zA-Z]:[\\/]/.test(src)) return `file:///${src.replace(/\\/g, "/")}`; return src.replace(/\\/g, "/"); }
-      function buildPreviewCandidates(src) { const normalized = normalizePreviewSrc(src); if (!normalized) return []; const candidates = [normalized]; const hasExtension = /\.[a-zA-Z0-9]+(?:[?#].*)?$/.test(normalized); if (!hasExtension && !normalized.endsWith("/")) [".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg"].forEach(ext => candidates.push(`${normalized}${ext}`)); return [...new Set(candidates)]; }
+      function nearestAncestorWithTag(node, tag) {
+        let current = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+        while (current) {
+          if (current.getAttribute && current.getAttribute('data-tag') === tag) return current;
+          current = current.parentElement;
+        }
+        return null;
+      }
+      function ancestorContainsRange(ancestor, range) {
+        const ancestorRange = document.createRange();
+        ancestorRange.selectNodeContents(ancestor);
+        return (
+          ancestorRange.compareBoundaryPoints(Range.START_TO_START, range) <= 0 && ancestorRange.compareBoundaryPoints(Range.END_TO_END, range) >= 0
+        );
+      }
+      function renderVisualMeta(span) {
+        if (!(span instanceof HTMLElement)) return;
+        if (span.dataset.click)
+          span.title = span.dataset.param ? `click=${span.dataset.click}, param=${span.dataset.param}` : `click=${span.dataset.click}`;
+        else span.removeAttribute('title');
+      }
+      function normalizePreviewSrc(src) {
+        if (!src) return '';
+        if (/^(https?:|file:|data:|blob:)/i.test(src)) return src;
+        if (/^[a-zA-Z]:[\\/]/.test(src)) return `file:///${src.replace(/\\/g, '/')}`;
+        return src.replace(/\\/g, '/');
+      }
+      function buildPreviewCandidates(src) {
+        const normalized = normalizePreviewSrc(src);
+        if (!normalized) return [];
+        const candidates = [normalized];
+        const hasExtension = /\.[a-zA-Z0-9]+(?:[?#].*)?$/.test(normalized);
+        if (!hasExtension && !normalized.endsWith('/'))
+          ['.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg'].forEach(ext => candidates.push(`${normalized}${ext}`));
+        return [...new Set(candidates)];
+      }
       function renderImagePreview(span) {
-        const originalSrc = span.dataset.src || ""; const previewCandidates = buildPreviewCandidates(originalSrc); span.textContent = "";
-        const align = (span.dataset.align || "").toLowerCase(); span.style.verticalAlign = align === "top" ? "top" : align === "center" ? "middle" : align === "bottom" ? "bottom" : "baseline";
-        const offset = (span.dataset.offset || "").trim();
-        if (/^-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?$/.test(offset)) { const parts = offset.split(",").map(value => Number.parseFloat(value.trim()) || 0); span.style.transform = `translate(${parts[0]}px, ${-parts[1]}px)`; }
-        else if (/^-?\d+(\.\d+)?$/.test(offset)) { const y = Number.parseFloat(offset) || 0; span.style.transform = `translate(0px, ${-y}px)`; }
-        else { span.style.transform = ""; }
-        const img = document.createElement("img"); img.className = "img-preview"; img.alt = originalSrc || "image"; img.draggable = false; if (span.dataset.width) img.style.width = `${span.dataset.width}px`; if (span.dataset.height) img.style.height = `${span.dataset.height}px`; span.appendChild(img);
-        if (previewCandidates.length === 0) { img.style.display = "none"; return; }
+        const originalSrc = span.dataset.src || '';
+        const previewCandidates = buildPreviewCandidates(originalSrc);
+        span.textContent = '';
+        const align = (span.dataset.align || '').toLowerCase();
+        span.style.verticalAlign = align === 'top' ? 'top' : align === 'center' ? 'middle' : align === 'bottom' ? 'bottom' : 'baseline';
+        const offset = (span.dataset.offset || '').trim();
+        if (/^-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?$/.test(offset)) {
+          const parts = offset.split(',').map(value => Number.parseFloat(value.trim()) || 0);
+          span.style.transform = `translate(${parts[0]}px, ${-parts[1]}px)`;
+        } else if (/^-?\d+(\.\d+)?$/.test(offset)) {
+          const y = Number.parseFloat(offset) || 0;
+          span.style.transform = `translate(0px, ${-y}px)`;
+        } else {
+          span.style.transform = '';
+        }
+        const img = document.createElement('img');
+        img.className = 'img-preview';
+        img.alt = originalSrc || 'image';
+        img.draggable = false;
+        if (span.dataset.width) img.style.width = `${span.dataset.width}px`;
+        if (span.dataset.height) img.style.height = `${span.dataset.height}px`;
+        span.appendChild(img);
+        if (previewCandidates.length === 0) {
+          img.style.display = 'none';
+          return;
+        }
         let candidateIndex = 0;
-        const tryNextCandidate = () => { if (candidateIndex >= previewCandidates.length) { img.style.display = "none"; return; } const candidate = previewCandidates[candidateIndex++]; img.style.display = ""; img.onload = () => { span.dataset.previewSrc = candidate; }; img.onerror = () => { tryNextCandidate(); }; img.src = candidate; };
+        const tryNextCandidate = () => {
+          if (candidateIndex >= previewCandidates.length) {
+            img.style.display = 'none';
+            return;
+          }
+          const candidate = previewCandidates[candidateIndex++];
+          img.style.display = '';
+          img.onload = () => {
+            span.dataset.previewSrc = candidate;
+          };
+          img.onerror = () => {
+            tryNextCandidate();
+          };
+          img.src = candidate;
+        };
         tryNextCandidate();
       }
 
       function applyAttrsToTagSpan(span, tag, attrs, visual = true) {
-        span.setAttribute("data-tag", tag);
+        span.setAttribute('data-tag', tag);
         switch (tag) {
-          case "b": span.style.fontWeight = "800"; break;
-          case "i": span.style.fontStyle = "italic"; break;
-          case "u": span.style.textDecoration = "underline"; span.style.textUnderlineOffset = "3px"; break;
-          case "color": span.dataset.color = attrs.color || span.dataset.color || "#ffffff"; span.style.color = span.dataset.color; break;
-          case "size": span.dataset.size = attrs.size || span.dataset.size || "20"; span.style.fontSize = `${span.dataset.size}px`; break;
-          case "outline": span.dataset.outlineColor = attrs.color || span.dataset.outlineColor || "#ffffff"; span.dataset.outlineWidth = attrs.width || span.dataset.outlineWidth || "2"; span.style.textShadow = `0 0 ${span.dataset.outlineWidth}px ${span.dataset.outlineColor}`; break;
-          case "on": span.dataset.onClick = attrs.click || span.dataset.onClick || ""; if (attrs.param) span.dataset.onParam = attrs.param; else delete span.dataset.onParam; span.style.outline = `1px dashed ${getComputedStyle(document.body).getPropertyValue("--success").trim()}`; span.style.outlineOffset = "2px"; break;
-          case "img": span.dataset.src = attrs.src || ""; if (attrs.width) span.dataset.width = attrs.width; else delete span.dataset.width; if (attrs.height) span.dataset.height = attrs.height; else delete span.dataset.height; if (attrs.align) span.dataset.align = attrs.align; else delete span.dataset.align; if (attrs.offset) span.dataset.offset = attrs.offset; else delete span.dataset.offset; if (attrs.click) span.dataset.click = attrs.click; else delete span.dataset.click; renderImagePreview(span); break;
+          case 'b':
+            span.style.fontWeight = '800';
+            break;
+          case 'i':
+            span.style.fontStyle = 'italic';
+            break;
+          case 'u':
+            span.style.textDecoration = 'underline';
+            span.style.textUnderlineOffset = '3px';
+            break;
+          case 'color':
+            span.dataset.color = attrs.color || span.dataset.color || '#ffffff';
+            span.style.color = span.dataset.color;
+            break;
+          case 'size':
+            span.dataset.size = attrs.size || span.dataset.size || '20';
+            span.style.fontSize = `${span.dataset.size}px`;
+            break;
+          case 'outline':
+            span.dataset.outlineColor = attrs.color || span.dataset.outlineColor || '#ffffff';
+            span.dataset.outlineWidth = attrs.width || span.dataset.outlineWidth || '2';
+            span.style.textShadow = `0 0 ${span.dataset.outlineWidth}px ${span.dataset.outlineColor}`;
+            break;
+          case 'on':
+            span.dataset.onClick = attrs.click || span.dataset.onClick || '';
+            if (attrs.param) span.dataset.onParam = attrs.param;
+            else delete span.dataset.onParam;
+            span.style.outline = `1px dashed ${getComputedStyle(document.body).getPropertyValue('--success').trim()}`;
+            span.style.outlineOffset = '2px';
+            break;
+          case 'img':
+            span.dataset.src = attrs.src || '';
+            if (attrs.width) span.dataset.width = attrs.width;
+            else delete span.dataset.width;
+            if (attrs.height) span.dataset.height = attrs.height;
+            else delete span.dataset.height;
+            if (attrs.align) span.dataset.align = attrs.align;
+            else delete span.dataset.align;
+            if (attrs.offset) span.dataset.offset = attrs.offset;
+            else delete span.dataset.offset;
+            if (attrs.click) span.dataset.click = attrs.click;
+            else delete span.dataset.click;
+            renderImagePreview(span);
+            break;
         }
-        if (!visual && tag !== "img") span.removeAttribute("style");
+        if (!visual && tag !== 'img') span.removeAttribute('style');
         renderVisualMeta(span);
       }
 
       function normalizeDuplicateTags(root) {
         if (!(root instanceof Element)) return;
-        const sameAttrs = (a, b) => { const keys = new Set([...a.getAttributeNames(), ...b.getAttributeNames()]); for (const key of keys) { if (key === "style" || key === "title") continue; if (a.getAttribute(key) !== b.getAttribute(key)) return false; } return true; };
-        const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT); const toRemove = [];
-        while (walker.nextNode()) { const el = walker.currentNode; if (!(el instanceof HTMLElement)) continue; const tag = el.getAttribute("data-tag"); if (!tag || tag === "img") continue; for (const child of Array.from(el.children)) { if (child.getAttribute && child.getAttribute("data-tag") === tag && sameAttrs(el, child)) { while (child.firstChild) el.insertBefore(child.firstChild, child); toRemove.push(child); } } }
+        const sameAttrs = (a, b) => {
+          const keys = new Set([...a.getAttributeNames(), ...b.getAttributeNames()]);
+          for (const key of keys) {
+            if (key === 'style' || key === 'title') continue;
+            if (a.getAttribute(key) !== b.getAttribute(key)) return false;
+          }
+          return true;
+        };
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT);
+        const toRemove = [];
+        while (walker.nextNode()) {
+          const el = walker.currentNode;
+          if (!(el instanceof HTMLElement)) continue;
+          const tag = el.getAttribute('data-tag');
+          if (!tag || tag === 'img') continue;
+          for (const child of Array.from(el.children)) {
+            if (child.getAttribute && child.getAttribute('data-tag') === tag && sameAttrs(el, child)) {
+              while (child.firstChild) el.insertBefore(child.firstChild, child);
+              toRemove.push(child);
+            }
+          }
+        }
         toRemove.forEach(node => node.remove());
-        root.querySelectorAll("span[data-tag]").forEach(el => { const next = el.nextSibling; if (next && next.nodeType === Node.ELEMENT_NODE && next.getAttribute && next.getAttribute("data-tag") === el.getAttribute("data-tag") && sameAttrs(el, next)) { while (next.firstChild) el.appendChild(next.firstChild); next.remove(); } });
+        root.querySelectorAll('span[data-tag]').forEach(el => {
+          const next = el.nextSibling;
+          if (
+            next &&
+            next.nodeType === Node.ELEMENT_NODE &&
+            next.getAttribute &&
+            next.getAttribute('data-tag') === el.getAttribute('data-tag') &&
+            sameAttrs(el, next)
+          ) {
+            while (next.firstChild) el.appendChild(next.firstChild);
+            next.remove();
+          }
+        });
         root.querySelectorAll('span[data-tag]:not([data-tag="img"])').forEach(el => {
           if (!el.textContent && el.childNodes.length === 0) el.remove();
         });
       }
 
-      function showToast(message) { const toast = document.getElementById("action-toast"); toast.textContent = message; window.clearTimeout(toastTimer); toast.classList.remove("is-visible"); void toast.offsetWidth; toast.classList.add("is-visible"); toastTimer = window.setTimeout(() => { toast.classList.remove("is-visible"); }, 1800); }
-      function showNoSelectionToast() { showToast(t("toastNoSelection")); }
-      function wrapSelection(tag, attrs = {}) {
-        const range = restoreSavedSelection(); if (!range || range.collapsed) { showNoSelectionToast(); return; }
-        const sel = window.getSelection(); saveState(); const ancestor = nearestAncestorWithTag(range.commonAncestorContainer, tag);
-        if (ancestor && ancestorContainsRange(ancestor, range)) { applyAttrsToTagSpan(ancestor, tag, attrs, true); const refreshedRange = document.createRange(); refreshedRange.selectNodeContents(ancestor); selectionState.range = refreshedRange.cloneRange(); restoreSavedSelection(); updateBBCode(); return; }
-        const span = document.createElement("span"); applyAttrsToTagSpan(span, tag, attrs, true);
-        try { range.surroundContents(span); } catch { const contents = range.extractContents(); span.appendChild(contents); range.insertNode(span); }
-        normalizeDuplicateTags(span.parentNode || span);
-        const newRange = document.createRange(); newRange.selectNodeContents(span); sel.removeAllRanges(); sel.addRange(newRange); selectionState.range = newRange.cloneRange(); renderSelectionOverlay(newRange); updateBBCode();
+      function showToast(message) {
+        const toast = document.getElementById('action-toast');
+        toast.textContent = message;
+        window.clearTimeout(toastTimer);
+        toast.classList.remove('is-visible');
+        void toast.offsetWidth;
+        toast.classList.add('is-visible');
+        toastTimer = window.setTimeout(() => {
+          toast.classList.remove('is-visible');
+        }, 1800);
       }
-      function insertBr() { const range = restoreSavedSelection(); if (!range) { showNoSelectionToast(); return; } saveState(); const sel = window.getSelection(); const br = document.createElement("br"); br.setAttribute("data-br", "1"); range.insertNode(br); range.setStartAfter(br); range.collapse(true); sel.removeAllRanges(); sel.addRange(range); selectionState.range = range.cloneRange(); clearSelectionOverlay(); updateBBCode(); }
-      function insertImg(attrs) { if (!attrs.src) { showToast(t("toastImgSrc")); return; } const range = restoreSavedSelection(); if (!range) { showNoSelectionToast(); return; } saveState(); const span = document.createElement("span"); applyAttrsToTagSpan(span, "img", attrs, true); const sel = window.getSelection(); range.insertNode(span); range.setStartAfter(span); range.collapse(true); sel.removeAllRanges(); sel.addRange(range); selectionState.range = range.cloneRange(); clearSelectionOverlay(); updateBBCode(); }
-      function clearSelectionFormatting() {
-        const range = restoreSavedSelection(); if (!range || range.collapsed) { showNoSelectionToast(); return; }
+      function showNoSelectionToast() {
+        showToast(t('toastNoSelection'));
+      }
+      function wrapSelection(tag, attrs = {}) {
+        const range = restoreSavedSelection();
+        if (!range || range.collapsed) {
+          showNoSelectionToast();
+          return;
+        }
+        const sel = window.getSelection();
+        saveState();
+        const ancestor = nearestAncestorWithTag(range.commonAncestorContainer, tag);
+        if (ancestor && ancestorContainsRange(ancestor, range)) {
+          applyAttrsToTagSpan(ancestor, tag, attrs, true);
+          const refreshedRange = document.createRange();
+          refreshedRange.selectNodeContents(ancestor);
+          selectionState.range = refreshedRange.cloneRange();
+          restoreSavedSelection();
+          updateBBCode();
+          return;
+        }
+        const span = document.createElement('span');
+        applyAttrsToTagSpan(span, tag, attrs, true);
+        try {
+          range.surroundContents(span);
+        } catch {
+          const contents = range.extractContents();
+          span.appendChild(contents);
+          range.insertNode(span);
+        }
+        normalizeDuplicateTags(span.parentNode || span);
+        const newRange = document.createRange();
+        newRange.selectNodeContents(span);
+        sel.removeAllRanges();
+        sel.addRange(newRange);
+        selectionState.range = newRange.cloneRange();
+        renderSelectionOverlay(newRange);
+        updateBBCode();
+      }
+      function insertBr() {
+        const range = restoreSavedSelection();
+        if (!range) {
+          showNoSelectionToast();
+          return;
+        }
         saveState();
         const sel = window.getSelection();
-        const viz = document.getElementById("viz");
+        const br = document.createElement('br');
+        br.setAttribute('data-br', '1');
+        range.insertNode(br);
+        range.setStartAfter(br);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        selectionState.range = range.cloneRange();
+        clearSelectionOverlay();
+        updateBBCode();
+      }
+      function insertImg(attrs) {
+        if (!attrs.src) {
+          showToast(t('toastImgSrc'));
+          return;
+        }
+        const range = restoreSavedSelection();
+        if (!range) {
+          showNoSelectionToast();
+          return;
+        }
+        saveState();
+        const span = document.createElement('span');
+        applyAttrsToTagSpan(span, 'img', attrs, true);
+        const sel = window.getSelection();
+        range.insertNode(span);
+        range.setStartAfter(span);
+        range.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(range);
+        selectionState.range = range.cloneRange();
+        clearSelectionOverlay();
+        updateBBCode();
+      }
+      function clearSelectionFormatting() {
+        const range = restoreSavedSelection();
+        if (!range || range.collapsed) {
+          showNoSelectionToast();
+          return;
+        }
+        saveState();
+        const sel = window.getSelection();
+        const viz = document.getElementById('viz');
         if (isWholeEditorRange(range)) {
-          const plainText = viz.textContent || "";
+          const plainText = viz.textContent || '';
           viz.textContent = plainText;
           const newRange = document.createRange();
           newRange.selectNodeContents(viz);
@@ -624,7 +1242,7 @@
         }
         const exactTaggedAncestor = findExactTaggedAncestorForRange(range);
         if (exactTaggedAncestor && exactTaggedAncestor.parentNode) {
-          const textNode = document.createTextNode(exactTaggedAncestor.textContent || "");
+          const textNode = document.createTextNode(exactTaggedAncestor.textContent || '');
           exactTaggedAncestor.parentNode.replaceChild(textNode, exactTaggedAncestor);
           const newRange = document.createRange();
           newRange.selectNodeContents(textNode);
@@ -635,97 +1253,376 @@
           updateBBCode();
           return;
         }
-        const fragment = range.cloneContents(); const text = fragment.textContent || ""; range.deleteContents(); const textNode = document.createTextNode(text); range.insertNode(textNode); const newRange = document.createRange(); newRange.selectNodeContents(textNode); sel.removeAllRanges(); sel.addRange(newRange); selectionState.range = newRange.cloneRange(); renderSelectionOverlay(newRange); updateBBCode();
+        const fragment = range.cloneContents();
+        const text = fragment.textContent || '';
+        range.deleteContents();
+        const textNode = document.createTextNode(text);
+        range.insertNode(textNode);
+        const newRange = document.createRange();
+        newRange.selectNodeContents(textNode);
+        sel.removeAllRanges();
+        sel.addRange(newRange);
+        selectionState.range = newRange.cloneRange();
+        renderSelectionOverlay(newRange);
+        updateBBCode();
       }
 
       function domToBBCode(node) {
-        if (node.nodeType === Node.TEXT_NODE) return escapeText(node.nodeValue || "");
-        if (node.nodeType !== Node.ELEMENT_NODE) return "";
-        const el = node; if (el.matches("br[data-br]")) return "<br/>"; const children = Array.from(el.childNodes).map(domToBBCode).join(""); if (el.id === "viz") return children; const tag = el.getAttribute("data-tag"); if (!tag) return children;
+        if (node.nodeType === Node.TEXT_NODE) return escapeText(node.nodeValue || '');
+        if (node.nodeType !== Node.ELEMENT_NODE) return '';
+        const el = node;
+        if (el.matches('br[data-br]')) return '<br/>';
+        const children = Array.from(el.childNodes).map(domToBBCode).join('');
+        if (el.id === 'viz') return children;
+        const tag = el.getAttribute('data-tag');
+        if (!tag) return children;
         switch (tag) {
-          case "b": return `<b>${children}</b>`;
-          case "i": return `<i>${children}</i>`;
-          case "u": return `<u>${children}</u>`;
-          case "color": return `<color=${escapeAttr(el.dataset.color || "#ffffff", '"')}>${children}</color>`;
-          case "size": return `<size=${escapeAttr(el.dataset.size || "20", '"')}>${children}</size>`;
-          case "outline": return `<outline color=${escapeAttr(el.dataset.outlineColor || "#ffffff", '"')} width=${escapeAttr(el.dataset.outlineWidth || "2", '"')}>${children}</outline>`;
-          case "on": return `<on${buildClickAttrs(el.dataset.onClick || "", el.dataset.onParam || "", '"')}>${children}</on>`;
-          case "img": { const attrs = [`src='${escapeAttr(el.dataset.src || "", "'")}'`]; if (el.dataset.width) attrs.push(`width=${escapeAttr(el.dataset.width, '"')}`); if (el.dataset.height) attrs.push(`height=${escapeAttr(el.dataset.height, '"')}`); if (el.dataset.align) attrs.push(`align=${escapeAttr(el.dataset.align, '"')}`); if (el.dataset.offset) attrs.push(`offset=${escapeAttr(el.dataset.offset, '"')}`); if (el.dataset.click) attrs.push(`click='${escapeAttr(el.dataset.click, "'")}'`); return `<img ${attrs.join(" ")} />`; }
-          default: return children;
+          case 'b':
+            return `<b>${children}</b>`;
+          case 'i':
+            return `<i>${children}</i>`;
+          case 'u':
+            return `<u>${children}</u>`;
+          case 'color':
+            return `<color=${escapeAttr(el.dataset.color || '#ffffff', '"')}>${children}</color>`;
+          case 'size':
+            return `<size=${escapeAttr(el.dataset.size || '20', '"')}>${children}</size>`;
+          case 'outline':
+            return `<outline color=${escapeAttr(el.dataset.outlineColor || '#ffffff', '"')} width=${escapeAttr(el.dataset.outlineWidth || '2', '"')}>${children}</outline>`;
+          case 'on':
+            return `<on${buildClickAttrs(el.dataset.onClick || '', el.dataset.onParam || '', '"')}>${children}</on>`;
+          case 'img': {
+            const attrs = [`src='${escapeAttr(el.dataset.src || '', "'")}'`];
+            if (el.dataset.width) attrs.push(`width=${escapeAttr(el.dataset.width, '"')}`);
+            if (el.dataset.height) attrs.push(`height=${escapeAttr(el.dataset.height, '"')}`);
+            if (el.dataset.align) attrs.push(`align=${escapeAttr(el.dataset.align, '"')}`);
+            if (el.dataset.offset) attrs.push(`offset=${escapeAttr(el.dataset.offset, '"')}`);
+            if (el.dataset.click) attrs.push(`click='${escapeAttr(el.dataset.click, "'")}'`);
+            return `<img ${attrs.join(' ')} />`;
+          }
+          default:
+            return children;
         }
       }
 
+      function decodeHtmlEntities(value) {
+        const area = document.createElement('textarea');
+        area.innerHTML = value;
+        return area.value;
+      }
+      function parseTagAttributes(raw) {
+        const attrs = {};
+        const pattern = /(\w+)\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/g;
+        let match = pattern.exec(raw);
+        while (match) {
+          attrs[match[1].toLowerCase()] = decodeHtmlEntities(match[2] ?? match[3] ?? match[4] ?? '');
+          match = pattern.exec(raw);
+        }
+        return attrs;
+      }
+      function parseOpenTag(rawTag) {
+        const cleaned = rawTag.slice(1, -1).trim();
+        const compactMatch = cleaned.match(/^(color|size)\s*=\s*(.+)$/i);
+        if (compactMatch) {
+          return {
+            tagName: compactMatch[1].toLowerCase(),
+            attrs: { value: decodeHtmlEntities(compactMatch[2].trim().replace(/^['"]|['"]$/g, '')) },
+          };
+        }
+        const spaceIndex = cleaned.search(/\s/);
+        const tagName = (spaceIndex === -1 ? cleaned : cleaned.slice(0, spaceIndex)).toLowerCase();
+        const attrText = spaceIndex === -1 ? '' : cleaned.slice(spaceIndex + 1);
+        if (tagName === 'color' || tagName === 'size') {
+          const eqIndex = cleaned.indexOf('=');
+          if (eqIndex !== -1) {
+            const value = cleaned
+              .slice(eqIndex + 1)
+              .trim()
+              .replace(/^['"]|['"]$/g, '');
+            return { tagName, attrs: { value: decodeHtmlEntities(value) } };
+          }
+        }
+        return { tagName, attrs: parseTagAttributes(attrText) };
+      }
+      function appendParsedNode(parent, tagName, attrs) {
+        if (tagName === 'br') {
+          const br = document.createElement('br');
+          br.setAttribute('data-br', '1');
+          parent.appendChild(br);
+          return parent;
+        }
+        if (tagName === 'img') {
+          const span = document.createElement('span');
+          applyAttrsToTagSpan(
+            span,
+            'img',
+            {
+              src: attrs.src || '',
+              width: attrs.width || '',
+              height: attrs.height || '',
+              align: attrs.align || '',
+              offset: attrs.offset || '',
+              click: attrs.click || '',
+            },
+            true
+          );
+          parent.appendChild(span);
+          return parent;
+        }
+        const supportedTags = new Set(['b', 'i', 'u', 'color', 'size', 'outline', 'on']);
+        if (!supportedTags.has(tagName)) return parent;
+        const span = document.createElement('span');
+        if (tagName === 'color') applyAttrsToTagSpan(span, tagName, { color: attrs.value || attrs.color || '#ffffff' }, true);
+        else if (tagName === 'size') applyAttrsToTagSpan(span, tagName, { size: attrs.value || attrs.size || '20' }, true);
+        else if (tagName === 'outline') applyAttrsToTagSpan(span, tagName, { color: attrs.color || '#ffffff', width: attrs.width || '2' }, true);
+        else if (tagName === 'on') applyAttrsToTagSpan(span, tagName, { click: attrs.click || '', param: attrs.param || '' }, true);
+        else applyAttrsToTagSpan(span, tagName, {}, true);
+        parent.appendChild(span);
+        return span;
+      }
+      function importBBCodeToEditor(input) {
+        const source = input.trim();
+        if (!source) {
+          showToast(t('toastImportEmpty'));
+          return;
+        }
+        const viz = document.getElementById('viz');
+        const root = document.createElement('div');
+        const stack = [{ tagName: 'root', element: root }];
+        const tokenPattern = /<[^>]+>|[^<]+/g;
+        let match = tokenPattern.exec(source);
+        while (match) {
+          const token = match[0];
+          const current = stack[stack.length - 1];
+          if (token.startsWith('<')) {
+            if (/^<br\s*\/?\s*>$/i.test(token)) {
+              appendParsedNode(current.element, 'br', {});
+            } else if (/^<img\b[^>]*\/?>$/i.test(token)) {
+              const parsed = parseOpenTag(token);
+              appendParsedNode(current.element, 'img', parsed.attrs);
+            } else if (/^<\//.test(token)) {
+              const closeTag = token.slice(2, -1).trim().toLowerCase();
+              if (stack.length <= 1 || stack[stack.length - 1].tagName !== closeTag) throw new Error('Invalid closing tag');
+              stack.pop();
+            } else {
+              const parsed = parseOpenTag(token);
+              const nextElement = appendParsedNode(current.element, parsed.tagName, parsed.attrs);
+              if (nextElement !== current.element) stack.push({ tagName: parsed.tagName, element: nextElement });
+            }
+          } else {
+            current.element.appendChild(document.createTextNode(decodeHtmlEntities(token)));
+          }
+          match = tokenPattern.exec(source);
+        }
+        if (stack.length !== 1) throw new Error('Unclosed tag');
+        saveState();
+        viz.innerHTML = '';
+        while (root.firstChild) viz.appendChild(root.firstChild);
+        selectionState.range = null;
+        clearSelectionOverlay();
+        updateBBCode();
+        saveState();
+      }
+
       async function copyTextToClipboard(text, showFeedback = false) {
-        try { await navigator.clipboard.writeText(text); if (showFeedback) showToast(t("toastCopied")); return true; }
-        catch {
-          try { const area = document.createElement("textarea"); area.value = text; document.body.appendChild(area); area.select(); document.execCommand("copy"); document.body.removeChild(area); if (showFeedback) showToast(t("toastCopied")); return true; }
-          catch { if (showFeedback) showToast(t("toastCopyFailed")); return false; }
+        try {
+          await navigator.clipboard.writeText(text);
+          if (showFeedback) showToast(t('toastCopied'));
+          return true;
+        } catch {
+          try {
+            const area = document.createElement('textarea');
+            area.value = text;
+            document.body.appendChild(area);
+            area.select();
+            document.execCommand('copy');
+            document.body.removeChild(area);
+            if (showFeedback) showToast(t('toastCopied'));
+            return true;
+          } catch {
+            if (showFeedback) showToast(t('toastCopyFailed'));
+            return false;
+          }
         }
       }
-      function updateBBCode() { const viz = document.getElementById("viz"); normalizeDuplicateTags(viz); const code = domToBBCode(viz); document.getElementById("bbcode").textContent = code; copyTextToClipboard(code, false); }
-      function getColorAttrs() { return { color: pickColorValue("inp-color-text", "inp-color-picker") }; }
-      function getSizeAttrs() { return { size: getPositiveNumber("inp-size") || "20" }; }
-      function getOutlineAttrs() { return { color: document.getElementById("inp-outline-color").value, width: getPositiveNumber("inp-outline-width") || "2" }; }
-      function getOnAttrs() { return { click: getText("inp-on-click"), param: getText("inp-on-param") }; }
-      function getImgAttrs() { return { src: getText("inp-img-src"), width: getPositiveNumber("inp-img-width"), height: getPositiveNumber("inp-img-height"), align: getText("inp-img-align"), offset: getText("inp-img-offset"), click: getText("inp-img-click") }; }
-      function performUndo() { const prev = history.undo(); if (prev !== null) { document.getElementById("viz").innerHTML = prev; selectionState.range = null; clearSelectionOverlay(); saveCurrentSelection(); updateBBCode(); } }
-      function performRedo() { const next = history.redo(); if (next !== null) { document.getElementById("viz").innerHTML = next; selectionState.range = null; clearSelectionOverlay(); saveCurrentSelection(); updateBBCode(); } }
-      function bindButtonFocusGuard() { document.querySelectorAll("button").forEach(button => { button.addEventListener("mousedown", event => { event.preventDefault(); }); }); }
+      function updateBBCode() {
+        const viz = document.getElementById('viz');
+        normalizeDuplicateTags(viz);
+        const code = domToBBCode(viz);
+        document.getElementById('bbcode').textContent = code;
+        document.getElementById('inp-bbcode-import').value = code;
+        copyTextToClipboard(code, false);
+      }
+      function getColorAttrs() {
+        return { color: pickColorValue('inp-color-text', 'inp-color-picker') };
+      }
+      function getSizeAttrs() {
+        return { size: getPositiveNumber('inp-size') || '20' };
+      }
+      function getOutlineAttrs() {
+        return { color: document.getElementById('inp-outline-color').value, width: getPositiveNumber('inp-outline-width') || '2' };
+      }
+      function getOnAttrs() {
+        return { click: getText('inp-on-click'), param: getText('inp-on-param') };
+      }
+      function getImgAttrs() {
+        return {
+          src: getText('inp-img-src'),
+          width: getPositiveNumber('inp-img-width'),
+          height: getPositiveNumber('inp-img-height'),
+          align: getText('inp-img-align'),
+          offset: getText('inp-img-offset'),
+          click: getText('inp-img-click'),
+        };
+      }
+      function performUndo() {
+        const prev = history.undo();
+        if (prev !== null) {
+          document.getElementById('viz').innerHTML = prev;
+          selectionState.range = null;
+          clearSelectionOverlay();
+          saveCurrentSelection();
+          updateBBCode();
+        }
+      }
+      function performRedo() {
+        const next = history.redo();
+        if (next !== null) {
+          document.getElementById('viz').innerHTML = next;
+          selectionState.range = null;
+          clearSelectionOverlay();
+          saveCurrentSelection();
+          updateBBCode();
+        }
+      }
+      function bindButtonFocusGuard() {
+        document.querySelectorAll('button').forEach(button => {
+          button.addEventListener('mousedown', event => {
+            event.preventDefault();
+          });
+        });
+      }
       function bindSelectionTracking(viz) {
         let inputTimer = 0;
-        viz.addEventListener("input", () => { window.clearTimeout(inputTimer); inputTimer = window.setTimeout(() => { saveState(); updateBBCode(); saveCurrentSelection(); }, 400); });
-        viz.addEventListener("keyup", () => { updateBBCode(); saveCurrentSelection(); renderSelectionOverlay(getEditorRange()); });
-        viz.addEventListener("mouseup", () => { updateBBCode(); saveCurrentSelection(); renderSelectionOverlay(getEditorRange()); });
-        viz.addEventListener("focus", () => { saveCurrentSelection(); renderSelectionOverlay(getEditorRange()); });
-        document.addEventListener("selectionchange", () => { saveCurrentSelection(); const range = getEditorRange(); if (range && !range.collapsed) renderSelectionOverlay(range); else if (selectionState.range && !selectionState.range.collapsed) renderSelectionOverlay(selectionState.range); else clearSelectionOverlay(); });
-        window.addEventListener("scroll", () => { if (selectionState.range && !selectionState.range.collapsed) renderSelectionOverlay(selectionState.range); });
-        window.addEventListener("resize", () => { if (selectionState.range && !selectionState.range.collapsed) renderSelectionOverlay(selectionState.range); });
+        viz.addEventListener('input', () => {
+          window.clearTimeout(inputTimer);
+          inputTimer = window.setTimeout(() => {
+            saveState();
+            updateBBCode();
+            saveCurrentSelection();
+          }, 400);
+        });
+        viz.addEventListener('keyup', () => {
+          updateBBCode();
+          saveCurrentSelection();
+          renderSelectionOverlay(getEditorRange());
+        });
+        viz.addEventListener('mouseup', () => {
+          updateBBCode();
+          saveCurrentSelection();
+          renderSelectionOverlay(getEditorRange());
+        });
+        viz.addEventListener('focus', () => {
+          saveCurrentSelection();
+          renderSelectionOverlay(getEditorRange());
+        });
+        document.addEventListener('selectionchange', () => {
+          saveCurrentSelection();
+          const range = getEditorRange();
+          if (range && !range.collapsed) renderSelectionOverlay(range);
+          else if (selectionState.range && !selectionState.range.collapsed) renderSelectionOverlay(selectionState.range);
+          else clearSelectionOverlay();
+        });
+        window.addEventListener('scroll', () => {
+          if (selectionState.range && !selectionState.range.collapsed) renderSelectionOverlay(selectionState.range);
+        });
+        window.addEventListener('resize', () => {
+          if (selectionState.range && !selectionState.range.collapsed) renderSelectionOverlay(selectionState.range);
+        });
       }
       function bindKeyboardShortcuts() {
-        document.addEventListener("keydown", event => {
-          if ((event.ctrlKey || event.metaKey) && ["+", "-", "=", "_", "0"].includes(event.key)) { event.preventDefault(); return; }
-          if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z" && !event.shiftKey) { event.preventDefault(); performUndo(); return; }
-          if ((event.ctrlKey || event.metaKey) && (event.key.toLowerCase() === "y" || (event.key.toLowerCase() === "z" && event.shiftKey))) { event.preventDefault(); performRedo(); }
+        document.addEventListener('keydown', event => {
+          if ((event.ctrlKey || event.metaKey) && ['+', '-', '=', '_', '0'].includes(event.key)) {
+            event.preventDefault();
+            return;
+          }
+          if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z' && !event.shiftKey) {
+            event.preventDefault();
+            performUndo();
+            return;
+          }
+          if ((event.ctrlKey || event.metaKey) && (event.key.toLowerCase() === 'y' || (event.key.toLowerCase() === 'z' && event.shiftKey))) {
+            event.preventDefault();
+            performRedo();
+          }
         });
-        document.addEventListener("wheel", event => { if (event.ctrlKey || event.metaKey) event.preventDefault(); }, { passive: false });
+        document.addEventListener(
+          'wheel',
+          event => {
+            if (event.ctrlKey || event.metaKey) event.preventDefault();
+          },
+          { passive: false }
+        );
       }
       function bindToolbarActions() {
         document.querySelectorAll('button[data-action="wrap"]').forEach(btn => {
-          btn.addEventListener("click", () => {
-            const tag = btn.getAttribute("data-tag");
-            if (tag === "color") return wrapSelection("color", getColorAttrs());
-            if (tag === "size") return wrapSelection("size", getSizeAttrs());
-            if (tag === "outline") return wrapSelection("outline", getOutlineAttrs());
-            if (tag === "on") { const attrs = getOnAttrs(); if (!attrs.click) { showToast(t("toastOnClick")); return; } return wrapSelection("on", attrs); }
+          btn.addEventListener('click', () => {
+            const tag = btn.getAttribute('data-tag');
+            if (tag === 'color') return wrapSelection('color', getColorAttrs());
+            if (tag === 'size') return wrapSelection('size', getSizeAttrs());
+            if (tag === 'outline') return wrapSelection('outline', getOutlineAttrs());
+            if (tag === 'on') {
+              const attrs = getOnAttrs();
+              if (!attrs.click) {
+                showToast(t('toastOnClick'));
+                return;
+              }
+              return wrapSelection('on', attrs);
+            }
             wrapSelection(tag);
           });
         });
-        document.getElementById("btn-br").addEventListener("click", insertBr);
-        document.getElementById("btn-img").addEventListener("click", () => insertImg(getImgAttrs()));
-        document.getElementById("btn-undo").addEventListener("click", performUndo);
-        document.getElementById("btn-redo").addEventListener("click", performRedo);
-        document.getElementById("btn-clear-format").addEventListener("click", clearSelectionFormatting);
-        document.getElementById("btn-copy").addEventListener("click", async () => { const text = document.getElementById("bbcode").textContent; await copyTextToClipboard(text, true); });
+        document.getElementById('btn-br').addEventListener('click', insertBr);
+        document.getElementById('btn-img').addEventListener('click', () => insertImg(getImgAttrs()));
+        document.getElementById('btn-undo').addEventListener('click', performUndo);
+        document.getElementById('btn-redo').addEventListener('click', performRedo);
+        document.getElementById('btn-clear-format').addEventListener('click', clearSelectionFormatting);
+        document.getElementById('btn-copy').addEventListener('click', async () => {
+          const text = document.getElementById('bbcode').textContent;
+          await copyTextToClipboard(text, true);
+        });
+        document.getElementById('btn-import-bbcode').addEventListener('click', () => {
+          try {
+            importBBCodeToEditor(document.getElementById('inp-bbcode-import').value);
+          } catch {
+            showToast(t('toastImportFailed'));
+          }
+        });
       }
       function bindToggles() {
-        document.getElementById("btn-lang-toggle").addEventListener("click", () => { state.lang = state.lang === "zh" ? "en" : "zh"; applyLanguage(); });
+        document.getElementById('btn-lang-toggle').addEventListener('click', () => {
+          state.lang = state.lang === 'zh' ? 'en' : 'zh';
+          applyLanguage();
+        });
       }
       function init() {
-        const viz = document.getElementById("viz");
-        const colorPicker = document.getElementById("inp-color-picker");
-        const colorText = document.getElementById("inp-color-text");
-        colorPicker.addEventListener("input", () => { colorText.value = colorPicker.value; });
+        const viz = document.getElementById('viz');
+        const colorPicker = document.getElementById('inp-color-picker');
+        const colorText = document.getElementById('inp-color-text');
+        colorPicker.addEventListener('input', () => {
+          colorText.value = colorPicker.value;
+        });
         applyLanguage();
         bindButtonFocusGuard();
         bindSelectionTracking(viz);
         bindKeyboardShortcuts();
         bindToolbarActions();
         bindToggles();
-        viz.innerHTML = t("sample");
+        viz.innerHTML = t('sample');
         updateBBCode();
         saveState();
       }
-      document.addEventListener("DOMContentLoaded", init);
+      document.addEventListener('DOMContentLoaded', init);
     </script>
   </body>
 </html>
