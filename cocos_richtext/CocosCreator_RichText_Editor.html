@@ -523,6 +523,13 @@
         return null;
       }
       function restoreSavedSelection() { const range = getEditorRange(); if (!range) return null; const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range); selectionState.range = range.cloneRange(); renderSelectionOverlay(range); return range; }
+      function isWholeEditorRange(range) {
+        if (!range) return false;
+        const viz = document.getElementById("viz");
+        const vizRange = document.createRange();
+        vizRange.selectNodeContents(viz);
+        return range.compareBoundaryPoints(Range.START_TO_START, vizRange) === 0 && range.compareBoundaryPoints(Range.END_TO_END, vizRange) === 0;
+      }
 
       function nearestAncestorWithTag(node, tag) { let current = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement; while (current) { if (current.getAttribute && current.getAttribute("data-tag") === tag) return current; current = current.parentElement; } return null; }
       function ancestorContainsRange(ancestor, range) { const ancestorRange = document.createRange(); ancestorRange.selectNodeContents(ancestor); return ancestorRange.compareBoundaryPoints(Range.START_TO_START, range) <= 0 && ancestorRange.compareBoundaryPoints(Range.END_TO_END, range) >= 0; }
@@ -581,7 +588,25 @@
       }
       function insertBr() { const range = restoreSavedSelection(); if (!range) { showNoSelectionToast(); return; } saveState(); const sel = window.getSelection(); const br = document.createElement("br"); br.setAttribute("data-br", "1"); range.insertNode(br); range.setStartAfter(br); range.collapse(true); sel.removeAllRanges(); sel.addRange(range); selectionState.range = range.cloneRange(); clearSelectionOverlay(); updateBBCode(); }
       function insertImg(attrs) { if (!attrs.src) { showToast(t("toastImgSrc")); return; } const range = restoreSavedSelection(); if (!range) { showNoSelectionToast(); return; } saveState(); const span = document.createElement("span"); applyAttrsToTagSpan(span, "img", attrs, true); const sel = window.getSelection(); range.insertNode(span); range.setStartAfter(span); range.collapse(true); sel.removeAllRanges(); sel.addRange(range); selectionState.range = range.cloneRange(); clearSelectionOverlay(); updateBBCode(); }
-      function clearSelectionFormatting() { const range = restoreSavedSelection(); if (!range || range.collapsed) { showNoSelectionToast(); return; } saveState(); const sel = window.getSelection(); const fragment = range.cloneContents(); const text = fragment.textContent || ""; range.deleteContents(); const textNode = document.createTextNode(text); range.insertNode(textNode); const newRange = document.createRange(); newRange.selectNodeContents(textNode); sel.removeAllRanges(); sel.addRange(newRange); selectionState.range = newRange.cloneRange(); renderSelectionOverlay(newRange); updateBBCode(); }
+      function clearSelectionFormatting() {
+        const range = restoreSavedSelection(); if (!range || range.collapsed) { showNoSelectionToast(); return; }
+        saveState();
+        const sel = window.getSelection();
+        const viz = document.getElementById("viz");
+        if (isWholeEditorRange(range)) {
+          const plainText = viz.textContent || "";
+          viz.textContent = plainText;
+          const newRange = document.createRange();
+          newRange.selectNodeContents(viz);
+          sel.removeAllRanges();
+          sel.addRange(newRange);
+          selectionState.range = newRange.cloneRange();
+          renderSelectionOverlay(newRange);
+          updateBBCode();
+          return;
+        }
+        const fragment = range.cloneContents(); const text = fragment.textContent || ""; range.deleteContents(); const textNode = document.createTextNode(text); range.insertNode(textNode); const newRange = document.createRange(); newRange.selectNodeContents(textNode); sel.removeAllRanges(); sel.addRange(newRange); selectionState.range = newRange.cloneRange(); renderSelectionOverlay(newRange); updateBBCode();
+      }
 
       function domToBBCode(node) {
         if (node.nodeType === Node.TEXT_NODE) return escapeText(node.nodeValue || "");
