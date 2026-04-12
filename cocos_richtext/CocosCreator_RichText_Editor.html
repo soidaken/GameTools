@@ -530,6 +530,20 @@
         vizRange.selectNodeContents(viz);
         return range.compareBoundaryPoints(Range.START_TO_START, vizRange) === 0 && range.compareBoundaryPoints(Range.END_TO_END, vizRange) === 0;
       }
+      function findExactTaggedAncestorForRange(range) {
+        if (!range) return null;
+        const viz = document.getElementById("viz");
+        let current = range.commonAncestorContainer.nodeType === Node.ELEMENT_NODE ? range.commonAncestorContainer : range.commonAncestorContainer.parentElement;
+        while (current && current !== viz) {
+          if (current.getAttribute && current.getAttribute("data-tag") && current.getAttribute("data-tag") !== "img") {
+            const currentRange = document.createRange();
+            currentRange.selectNodeContents(current);
+            if (range.compareBoundaryPoints(Range.START_TO_START, currentRange) === 0 && range.compareBoundaryPoints(Range.END_TO_END, currentRange) === 0) return current;
+          }
+          current = current.parentElement;
+        }
+        return null;
+      }
 
       function nearestAncestorWithTag(node, tag) { let current = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement; while (current) { if (current.getAttribute && current.getAttribute("data-tag") === tag) return current; current = current.parentElement; } return null; }
       function ancestorContainsRange(ancestor, range) { const ancestorRange = document.createRange(); ancestorRange.selectNodeContents(ancestor); return ancestorRange.compareBoundaryPoints(Range.START_TO_START, range) <= 0 && ancestorRange.compareBoundaryPoints(Range.END_TO_END, range) >= 0; }
@@ -573,6 +587,9 @@
         while (walker.nextNode()) { const el = walker.currentNode; if (!(el instanceof HTMLElement)) continue; const tag = el.getAttribute("data-tag"); if (!tag || tag === "img") continue; for (const child of Array.from(el.children)) { if (child.getAttribute && child.getAttribute("data-tag") === tag && sameAttrs(el, child)) { while (child.firstChild) el.insertBefore(child.firstChild, child); toRemove.push(child); } } }
         toRemove.forEach(node => node.remove());
         root.querySelectorAll("span[data-tag]").forEach(el => { const next = el.nextSibling; if (next && next.nodeType === Node.ELEMENT_NODE && next.getAttribute && next.getAttribute("data-tag") === el.getAttribute("data-tag") && sameAttrs(el, next)) { while (next.firstChild) el.appendChild(next.firstChild); next.remove(); } });
+        root.querySelectorAll('span[data-tag]:not([data-tag="img"])').forEach(el => {
+          if (!el.textContent && el.childNodes.length === 0) el.remove();
+        });
       }
 
       function showToast(message) { const toast = document.getElementById("action-toast"); toast.textContent = message; window.clearTimeout(toastTimer); toast.classList.remove("is-visible"); void toast.offsetWidth; toast.classList.add("is-visible"); toastTimer = window.setTimeout(() => { toast.classList.remove("is-visible"); }, 1800); }
@@ -598,6 +615,19 @@
           viz.textContent = plainText;
           const newRange = document.createRange();
           newRange.selectNodeContents(viz);
+          sel.removeAllRanges();
+          sel.addRange(newRange);
+          selectionState.range = newRange.cloneRange();
+          renderSelectionOverlay(newRange);
+          updateBBCode();
+          return;
+        }
+        const exactTaggedAncestor = findExactTaggedAncestorForRange(range);
+        if (exactTaggedAncestor && exactTaggedAncestor.parentNode) {
+          const textNode = document.createTextNode(exactTaggedAncestor.textContent || "");
+          exactTaggedAncestor.parentNode.replaceChild(textNode, exactTaggedAncestor);
+          const newRange = document.createRange();
+          newRange.selectNodeContents(textNode);
           sel.removeAllRanges();
           sel.addRange(newRange);
           selectionState.range = newRange.cloneRange();
