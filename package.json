@@ -1,0 +1,10 @@
+{
+  "name": "gametools-richtext-tests",
+  "private": true,
+  "scripts": {
+    "test:richtext": "node --test cocos_richtext/tests/richtext-editor.test.js"
+  },
+  "devDependencies": {
+    "jsdom": "^26.1.0"
+  }
+}

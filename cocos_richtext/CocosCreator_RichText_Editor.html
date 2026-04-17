@@ -1296,7 +1296,7 @@
             if (el.dataset.width) attrs.push(`width=${escapeAttr(el.dataset.width, '"')}`);
             if (el.dataset.height) attrs.push(`height=${escapeAttr(el.dataset.height, '"')}`);
             if (el.dataset.align) attrs.push(`align=${escapeAttr(el.dataset.align, '"')}`);
-            if (el.dataset.offset) attrs.push(`offset=${escapeAttr(el.dataset.offset, '"')}`);
+            if (el.dataset.offset) attrs.push(`offset='${escapeAttr(el.dataset.offset, "'")}'`);
             if (el.dataset.click) attrs.push(`click='${escapeAttr(el.dataset.click, "'")}'`);
             return `<img ${attrs.join(' ')} />`;
           }
