@@ -1149,8 +1149,8 @@
         }
         const sel = window.getSelection();
         saveState();
-        const ancestor = nearestAncestorWithTag(range.commonAncestorContainer, tag);
-        if (ancestor && ancestorContainsRange(ancestor, range)) {
+        const ancestor = findExactTaggedAncestorForRange(range);
+        if (ancestor && ancestor.getAttribute('data-tag') === tag) {
           applyAttrsToTagSpan(ancestor, tag, attrs, true);
           const refreshedRange = document.createRange();
           refreshedRange.selectNodeContents(ancestor);
