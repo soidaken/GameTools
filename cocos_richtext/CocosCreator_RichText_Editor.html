@@ -419,9 +419,6 @@
         text-decoration: underline;
         text-underline-offset: 3px;
       }
-      #viz span[data-tag='outline'] {
-        color: #f7fbff;
-      }
       #viz span[data-tag='on'] {
         outline: 1px dashed var(--success);
         outline-offset: 2px;
@@ -1092,7 +1089,6 @@
           case 'outline':
             span.dataset.outlineColor = attrs.color || span.dataset.outlineColor || '#ffffff';
             span.dataset.outlineWidth = attrs.width || span.dataset.outlineWidth || '2';
-            span.style.color = span.style.color || '#f7fbff';
             span.style.textShadow = buildOutlineTextShadow(span.dataset.outlineColor, span.dataset.outlineWidth);
             break;
           case 'on':
