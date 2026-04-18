@@ -300,6 +300,9 @@
       .editor-render-metric-group input {
         width: 96px;
       }
+      .editor-font-family-group input {
+        width: 220px;
+      }
       .editor-width-suffix {
         color: var(--text-soft);
         font-size: 11px;
@@ -307,13 +310,14 @@
       #viz {
         flex: 0 0 auto;
         width: 100%;
-        max-width: var(--editor-render-width, 640px);
+        max-width: var(--editor-render-width, 400px);
         min-height: 320px;
         outline: none;
         white-space: pre-wrap;
         word-break: break-word;
         font-size: var(--editor-base-font-size, 40px);
-        line-height: var(--editor-line-height, 62px);
+        font-family: var(--editor-font-family, Arial);
+        line-height: var(--editor-line-height, 40px);
         letter-spacing: 0.012em;
         font-weight: 520;
         color: #f2f7fb;
@@ -629,6 +633,10 @@
               <button type="button" id="btn-undo" title="撤销 (Ctrl+Z)">撤销</button>
               <button type="button" id="btn-redo" title="重做 (Ctrl+Y / Ctrl+Shift+Z)">重做</button>
               <button type="button" id="btn-clear-format" title="将选中文本还原为纯文本">清除格式</button>
+              <div class="editor-action-group editor-render-metric-group editor-font-family-group">
+                <span class="editor-action-label" id="label-font-family">渲染字体</span>
+                <input type="text" id="inp-font-family" value="Arial" placeholder="例如：Microsoft YaHei, SimHei" />
+              </div>
               <div class="editor-action-group editor-render-metric-group">
                 <span class="editor-action-label" id="label-base-font-size">基础字体大小</span>
                 <input type="number" id="inp-base-font-size" value="40" min="1" step="1" />
@@ -636,12 +644,12 @@
               </div>
               <div class="editor-action-group editor-render-metric-group">
                 <span class="editor-action-label" id="label-render-width">最大宽度</span>
-                <input type="number" id="inp-render-width" value="640" min="1" step="1" />
+                <input type="number" id="inp-render-width" value="400" min="1" step="1" />
                 <span class="editor-width-suffix">px</span>
               </div>
               <div class="editor-action-group editor-render-metric-group">
                 <span class="editor-action-label" id="label-line-height">行高</span>
-                <input type="number" id="inp-line-height" value="62" min="1" step="1" />
+                <input type="number" id="inp-line-height" value="40" min="1" step="1" />
                 <span class="editor-width-suffix">px</span>
               </div>
             </div>
@@ -720,6 +728,8 @@
           undo: '撤销',
           redo: '重做',
           clearFormat: '清除格式',
+          labelFontFamily: '渲染字体',
+          fontFamilyPlaceholder: '例如：Microsoft YaHei, SimHei',
           labelBaseFontSize: '基础字体大小',
           labelRenderWidth: '最大宽度',
           labelLineHeight: '行高',
@@ -787,6 +797,8 @@
           undo: 'Undo',
           redo: 'Redo',
           clearFormat: 'Clear Format',
+          labelFontFamily: 'Render Font',
+          fontFamilyPlaceholder: 'Example: Microsoft YaHei, SimHei',
           labelBaseFontSize: 'Base Font Size',
           labelRenderWidth: 'Max Width',
           labelLineHeight: 'Line Height',
@@ -896,6 +908,8 @@
         setText('btn-undo', 'undo');
         setText('btn-redo', 'redo');
         setText('btn-clear-format', 'clearFormat');
+        setText('label-font-family', 'labelFontFamily');
+        document.getElementById('inp-font-family').placeholder = t('fontFamilyPlaceholder');
         setText('label-base-font-size', 'labelBaseFontSize');
         setText('label-render-width', 'labelRenderWidth');
         setText('label-line-height', 'labelLineHeight');
@@ -916,20 +930,29 @@
       function saveState() {
         history.push(document.getElementById('viz').innerHTML);
       }
+      function getFontFamilyValue() {
+        const raw = document.getElementById('inp-font-family').value.trim();
+        return raw || 'Arial';
+      }
       function getBaseFontSizeValue() {
         const raw = document.getElementById('inp-base-font-size').value.trim();
         const parsed = Number.parseInt(raw, 10);
         return Number.isFinite(parsed) && parsed > 0 ? parsed : 40;
       }
+      function syncEditorFontFamily(normalizeInput = false) {
+        const fontFamily = getFontFamilyValue().replace(/[;{}]/g, '');
+        document.documentElement.style.setProperty('--editor-font-family', fontFamily);
+        if (normalizeInput) document.getElementById('inp-font-family').value = fontFamily;
+      }
       function getRenderWidthValue() {
         const raw = document.getElementById('inp-render-width').value.trim();
         const parsed = Number.parseInt(raw, 10);
-        return Number.isFinite(parsed) && parsed > 0 ? parsed : 640;
+        return Number.isFinite(parsed) && parsed > 0 ? parsed : 400;
       }
       function getLineHeightValue() {
         const raw = document.getElementById('inp-line-height').value.trim();
         const parsed = Number.parseInt(raw, 10);
-        return Number.isFinite(parsed) && parsed > 0 ? parsed : 62;
+        return Number.isFinite(parsed) && parsed > 0 ? parsed : 40;
       }
       function syncEditorBaseFontSize(normalizeInput = false) {
         const fontSize = getBaseFontSizeValue();
@@ -1737,6 +1760,12 @@
         document.getElementById('btn-undo').addEventListener('click', performUndo);
         document.getElementById('btn-redo').addEventListener('click', performRedo);
         document.getElementById('btn-clear-format').addEventListener('click', clearSelectionFormatting);
+        document.getElementById('inp-font-family').addEventListener('input', () => {
+          syncEditorFontFamily(false);
+        });
+        document.getElementById('inp-font-family').addEventListener('change', () => {
+          syncEditorFontFamily(true);
+        });
         document.getElementById('inp-base-font-size').addEventListener('input', () => {
           const raw = document.getElementById('inp-base-font-size').value.trim();
           if (!raw) return;
@@ -1792,6 +1821,7 @@
         bindKeyboardShortcuts();
         bindToolbarActions();
         bindToggles();
+        syncEditorFontFamily(true);
         syncEditorBaseFontSize(true);
         syncEditorRenderWidth(true);
         syncEditorLineHeight(true);
