@@ -270,20 +270,50 @@
         border-bottom: 1px solid var(--line);
         background: rgba(20, 30, 41, 0.7);
       }
-      .editor,
+      .editor-action-group {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .editor-action-label {
+        color: var(--text-soft);
+        font-size: 11px;
+        letter-spacing: 0.02em;
+      }
+      .editor-shell,
       .preview {
         flex: 1;
         overflow: auto;
         padding: 14px;
         background: var(--preview-bg);
       }
+      .editor-shell {
+        display: flex;
+        align-items: flex-start;
+      }
+      .editor-render-metric-group {
+        margin-left: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .editor-render-metric-group input {
+        width: 96px;
+      }
+      .editor-width-suffix {
+        color: var(--text-soft);
+        font-size: 11px;
+      }
       #viz {
+        flex: 0 0 auto;
+        width: 100%;
+        max-width: var(--editor-render-width, 640px);
         min-height: 320px;
         outline: none;
         white-space: pre-wrap;
         word-break: break-word;
-        font-size: 40px;
-        line-height: 1.55;
+        font-size: var(--editor-base-font-size, 40px);
+        line-height: var(--editor-line-height, 62px);
         letter-spacing: 0.012em;
         font-weight: 520;
         color: #f2f7fb;
@@ -305,8 +335,8 @@
         filter: saturate(1.12) brightness(1.04);
       }
       #viz span[data-tag='size'] {
-        display: inline-block;
-        line-height: 1.25;
+        display: inline;
+        line-height: inherit;
       }
       #viz::selection,
       #viz *::selection {
@@ -599,8 +629,25 @@
               <button type="button" id="btn-undo" title="撤销 (Ctrl+Z)">撤销</button>
               <button type="button" id="btn-redo" title="重做 (Ctrl+Y / Ctrl+Shift+Z)">重做</button>
               <button type="button" id="btn-clear-format" title="将选中文本还原为纯文本">清除格式</button>
+              <div class="editor-action-group editor-render-metric-group">
+                <span class="editor-action-label" id="label-base-font-size">基础字体大小</span>
+                <input type="number" id="inp-base-font-size" value="40" min="1" step="1" />
+                <span class="editor-width-suffix">px</span>
+              </div>
+              <div class="editor-action-group editor-render-metric-group">
+                <span class="editor-action-label" id="label-render-width">最大宽度</span>
+                <input type="number" id="inp-render-width" value="640" min="1" step="1" />
+                <span class="editor-width-suffix">px</span>
+              </div>
+              <div class="editor-action-group editor-render-metric-group">
+                <span class="editor-action-label" id="label-line-height">行高</span>
+                <input type="number" id="inp-line-height" value="62" min="1" step="1" />
+                <span class="editor-width-suffix">px</span>
+              </div>
             </div>
-            <div id="viz" class="editor" contenteditable="true" spellcheck="false"></div>
+            <div class="editor-shell">
+              <div id="viz" contenteditable="true" spellcheck="false"></div>
+            </div>
             <div class="panel-footer muted" id="editor-help">1. 选中需要操作的内容<br />2. 套用左边的操作</div>
           </div>
 
@@ -673,6 +720,11 @@
           undo: '撤销',
           redo: '重做',
           clearFormat: '清除格式',
+          labelBaseFontSize: '基础字体大小',
+          labelRenderWidth: '最大宽度',
+          labelLineHeight: '行高',
+          layoutLeft: '靠左',
+          layoutRight: '靠右',
           editorHelp: '1. 选中需要操作的内容<br />2. 套用左边的操作',
           copyButton: '复制 BBCode（每次操作之后会自动复制到剪贴板）',
           panelBbcodeTitle: '生成的 BBCode',
@@ -735,6 +787,11 @@
           undo: 'Undo',
           redo: 'Redo',
           clearFormat: 'Clear Format',
+          labelBaseFontSize: 'Base Font Size',
+          labelRenderWidth: 'Max Width',
+          labelLineHeight: 'Line Height',
+          layoutLeft: 'Left',
+          layoutRight: 'Right',
           editorHelp: '1. Select the content you want to edit<br />2. Apply an action from the left',
           copyButton: 'Copy BBCode (auto-copies after every action)',
           panelBbcodeTitle: 'Generated BBCode',
@@ -839,6 +896,9 @@
         setText('btn-undo', 'undo');
         setText('btn-redo', 'redo');
         setText('btn-clear-format', 'clearFormat');
+        setText('label-base-font-size', 'labelBaseFontSize');
+        setText('label-render-width', 'labelRenderWidth');
+        setText('label-line-height', 'labelLineHeight');
         setHtml('editor-help', 'editorHelp');
         setText('btn-copy', 'copyButton');
         setText('panel-bbcode-title', 'panelBbcodeTitle');
@@ -855,6 +915,36 @@
 
       function saveState() {
         history.push(document.getElementById('viz').innerHTML);
+      }
+      function getBaseFontSizeValue() {
+        const raw = document.getElementById('inp-base-font-size').value.trim();
+        const parsed = Number.parseInt(raw, 10);
+        return Number.isFinite(parsed) && parsed > 0 ? parsed : 40;
+      }
+      function getRenderWidthValue() {
+        const raw = document.getElementById('inp-render-width').value.trim();
+        const parsed = Number.parseInt(raw, 10);
+        return Number.isFinite(parsed) && parsed > 0 ? parsed : 640;
+      }
+      function getLineHeightValue() {
+        const raw = document.getElementById('inp-line-height').value.trim();
+        const parsed = Number.parseInt(raw, 10);
+        return Number.isFinite(parsed) && parsed > 0 ? parsed : 62;
+      }
+      function syncEditorBaseFontSize(normalizeInput = false) {
+        const fontSize = getBaseFontSizeValue();
+        document.documentElement.style.setProperty('--editor-base-font-size', `${fontSize}px`);
+        if (normalizeInput) document.getElementById('inp-base-font-size').value = String(fontSize);
+      }
+      function syncEditorRenderWidth(normalizeInput = false) {
+        const width = getRenderWidthValue();
+        document.documentElement.style.setProperty('--editor-render-width', `${width}px`);
+        if (normalizeInput) document.getElementById('inp-render-width').value = String(width);
+      }
+      function syncEditorLineHeight(normalizeInput = false) {
+        const lineHeight = getLineHeightValue();
+        document.documentElement.style.setProperty('--editor-line-height', `${lineHeight}px`);
+        if (normalizeInput) document.getElementById('inp-line-height').value = String(lineHeight);
       }
       function getText(id) {
         return document.getElementById(id).value.trim();
@@ -968,7 +1058,6 @@
         }
         return null;
       }
-
       function nearestAncestorWithTag(node, tag) {
         let current = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
         while (current) {
@@ -1064,7 +1153,6 @@
         shadows.push(`0 0 ${Math.max(1, Math.ceil(width / 2))}px color-mix(in srgb, ${color} 48%, transparent)`);
         return shadows.join(', ');
       }
-
       function applyAttrsToTagSpan(span, tag, attrs, visual = true) {
         span.setAttribute('data-tag', tag);
         switch (tag) {
@@ -1178,11 +1266,13 @@
       function showNoSelectionToast() {
         showToast(t('toastNoSelection'));
       }
-      function liftNodeOutOfTagWrappers(node, root) {
+      function liftNodeOutOfFormattingWrappers(node, root) {
         let current = node;
         while (current.parentNode && current.parentNode !== root) {
           const parent = current.parentNode;
-          if (!(parent instanceof HTMLElement) || !parent.getAttribute('data-tag') || !parent.parentNode) break;
+          if (!(parent instanceof HTMLElement) || !parent.parentNode) break;
+          const isFormattingWrapper = Boolean(parent.getAttribute('data-tag'));
+          if (!isFormattingWrapper) break;
           const grandParent = parent.parentNode;
           const trailingSiblings = [];
           while (current.nextSibling) (trailingSiblings.push(current.nextSibling), parent.removeChild(current.nextSibling));
@@ -1314,7 +1404,7 @@
         range.deleteContents();
         const textNode = document.createTextNode(text);
         range.insertNode(textNode);
-        liftNodeOutOfTagWrappers(textNode, viz);
+        liftNodeOutOfFormattingWrappers(textNode, viz);
         normalizeDuplicateTags(viz);
         const newRange = document.createRange();
         newRange.selectNodeContents(textNode);
@@ -1506,7 +1596,9 @@
       function updateBBCode() {
         const viz = document.getElementById('viz');
         normalizeDuplicateTags(viz);
-        const code = domToBBCode(viz);
+        const exportRoot = viz.cloneNode(true);
+        normalizeDuplicateTags(exportRoot);
+        const code = domToBBCode(exportRoot);
         document.getElementById('bbcode').textContent = code;
         document.getElementById('inp-bbcode-import').value = code;
         copyTextToClipboard(code, false);
@@ -1645,6 +1737,30 @@
         document.getElementById('btn-undo').addEventListener('click', performUndo);
         document.getElementById('btn-redo').addEventListener('click', performRedo);
         document.getElementById('btn-clear-format').addEventListener('click', clearSelectionFormatting);
+        document.getElementById('inp-base-font-size').addEventListener('input', () => {
+          const raw = document.getElementById('inp-base-font-size').value.trim();
+          if (!raw) return;
+          syncEditorBaseFontSize(false);
+        });
+        document.getElementById('inp-base-font-size').addEventListener('change', () => {
+          syncEditorBaseFontSize(true);
+        });
+        document.getElementById('inp-render-width').addEventListener('input', () => {
+          const raw = document.getElementById('inp-render-width').value.trim();
+          if (!raw) return;
+          syncEditorRenderWidth(false);
+        });
+        document.getElementById('inp-render-width').addEventListener('change', () => {
+          syncEditorRenderWidth(true);
+        });
+        document.getElementById('inp-line-height').addEventListener('input', () => {
+          const raw = document.getElementById('inp-line-height').value.trim();
+          if (!raw) return;
+          syncEditorLineHeight(false);
+        });
+        document.getElementById('inp-line-height').addEventListener('change', () => {
+          syncEditorLineHeight(true);
+        });
         document.getElementById('btn-copy').addEventListener('click', async () => {
           const text = document.getElementById('bbcode').textContent;
           await copyTextToClipboard(text, true);
@@ -1676,6 +1792,9 @@
         bindKeyboardShortcuts();
         bindToolbarActions();
         bindToggles();
+        syncEditorBaseFontSize(true);
+        syncEditorRenderWidth(true);
+        syncEditorLineHeight(true);
         viz.innerHTML = t('sample');
         updateBBCode();
         saveState();
