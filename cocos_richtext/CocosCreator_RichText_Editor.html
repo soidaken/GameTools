@@ -282,7 +282,7 @@
         outline: none;
         white-space: pre-wrap;
         word-break: break-word;
-        font-size: 28px;
+        font-size: 40px;
         line-height: 1.55;
         letter-spacing: 0.012em;
         font-weight: 520;
@@ -512,7 +512,7 @@
           <div class="field-grid">
             <div class="field">
               <label for="inp-size" id="label-size">字号</label>
-              <input type="number" id="inp-size" value="28" min="1" step="1" />
+              <input type="number" id="inp-size" value="40" min="1" step="1" />
             </div>
           </div>
           <button type="button" data-action="wrap" data-tag="size" id="btn-apply-size">套用 size</button>
@@ -1083,7 +1083,7 @@
             span.style.color = span.dataset.color;
             break;
           case 'size':
-            span.dataset.size = attrs.size || span.dataset.size || '20';
+            span.dataset.size = attrs.size || span.dataset.size || '40';
             span.style.fontSize = `${span.dataset.size}px`;
             break;
           case 'outline':
@@ -1344,7 +1344,7 @@
           case 'color':
             return `<color=${escapeAttr(el.dataset.color || '#ffffff', '"')}>${children}</color>`;
           case 'size':
-            return `<size=${escapeAttr(el.dataset.size || '20', '"')}>${children}</size>`;
+            return `<size=${escapeAttr(el.dataset.size || '40', '"')}>${children}</size>`;
           case 'outline':
             return `<outline color=${escapeAttr(el.dataset.outlineColor || '#ffffff', '"')} width=${escapeAttr(el.dataset.outlineWidth || '2', '"')}>${children}</outline>`;
           case 'on':
@@ -1431,7 +1431,7 @@
         if (!supportedTags.has(tagName)) return parent;
         const span = document.createElement('span');
         if (tagName === 'color') applyAttrsToTagSpan(span, tagName, { color: attrs.value || attrs.color || '#ffffff' }, true);
-        else if (tagName === 'size') applyAttrsToTagSpan(span, tagName, { size: attrs.value || attrs.size || '20' }, true);
+        else if (tagName === 'size') applyAttrsToTagSpan(span, tagName, { size: attrs.value || attrs.size || '40' }, true);
         else if (tagName === 'outline') applyAttrsToTagSpan(span, tagName, { color: attrs.color || '#ffffff', width: attrs.width || '2' }, true);
         else if (tagName === 'on') applyAttrsToTagSpan(span, tagName, { click: attrs.click || '', param: attrs.param || '' }, true);
         else applyAttrsToTagSpan(span, tagName, {}, true);
@@ -1515,7 +1515,7 @@
         return { color: pickColorValue('inp-color-text', 'inp-color-picker') };
       }
       function getSizeAttrs() {
-        return { size: getPositiveNumber('inp-size') || '20' };
+        return { size: getPositiveNumber('inp-size') || '40' };
       }
       function getOutlineAttrs() {
         return { color: document.getElementById('inp-outline-color').value, width: getPositiveNumber('inp-outline-width') || '2' };
