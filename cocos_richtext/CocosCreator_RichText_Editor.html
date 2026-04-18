@@ -1156,7 +1156,11 @@
           }
         });
         root.querySelectorAll('span[data-tag]:not([data-tag="img"])').forEach(el => {
-          if (!el.textContent && el.childNodes.length === 0) el.remove();
+          const hasMeaningfulChildren = Array.from(el.childNodes).some(child => {
+            if (child.nodeType === Node.TEXT_NODE) return Boolean(child.nodeValue);
+            return true;
+          });
+          if (!el.textContent && !hasMeaningfulChildren) el.remove();
         });
       }
 
@@ -1173,6 +1177,25 @@
       }
       function showNoSelectionToast() {
         showToast(t('toastNoSelection'));
+      }
+      function liftNodeOutOfTagWrappers(node, root) {
+        let current = node;
+        while (current.parentNode && current.parentNode !== root) {
+          const parent = current.parentNode;
+          if (!(parent instanceof HTMLElement) || !parent.getAttribute('data-tag') || !parent.parentNode) break;
+          const grandParent = parent.parentNode;
+          const trailingSiblings = [];
+          while (current.nextSibling) (trailingSiblings.push(current.nextSibling), parent.removeChild(current.nextSibling));
+          const referenceNode = parent.nextSibling;
+          grandParent.insertBefore(current, referenceNode);
+          if (trailingSiblings.length > 0) {
+            const trailingWrapper = parent.cloneNode(false);
+            trailingSiblings.forEach(child => trailingWrapper.appendChild(child));
+            grandParent.insertBefore(trailingWrapper, referenceNode);
+          }
+          if (parent.childNodes.length === 0) parent.remove();
+        }
+        return current;
       }
       function wrapSelection(tag, attrs = {}) {
         const range = restoreSavedSelection();
@@ -1291,6 +1314,8 @@
         range.deleteContents();
         const textNode = document.createTextNode(text);
         range.insertNode(textNode);
+        liftNodeOutOfTagWrappers(textNode, viz);
+        normalizeDuplicateTags(viz);
         const newRange = document.createRange();
         newRange.selectNodeContents(textNode);
         sel.removeAllRanges();
